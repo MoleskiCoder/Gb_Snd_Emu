@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="gb_apu">
+      <UniqueIdentifier>{253687a2-26c9-480e-a331-a1d3c5de1d4d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gb_apu\Header Files">
+      <UniqueIdentifier>{c64706a9-d0ed-4514-af8c-29e5daf6b38d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gb_apu\Source Files">
+      <UniqueIdentifier>{fb7d6edf-a5ce-42bf-bbec-97962573a127}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="gb_apu\blargg_common.h">
+      <Filter>gb_apu\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gb_apu\blargg_source.h">
+      <Filter>gb_apu\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gb_apu\Blip_Buffer.h">
+      <Filter>gb_apu\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gb_apu\Blip_Synth.h">
+      <Filter>gb_apu\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gb_apu\Gb_Apu.h">
+      <Filter>gb_apu\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gb_apu\Gb_Oscs.h">
+      <Filter>gb_apu\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gb_apu\Multi_Buffer.h">
+      <Filter>gb_apu\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Basic_Gb_Apu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Sound_Queue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="gb_apu\Blip_Buffer.cpp">
+      <Filter>gb_apu\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gb_apu\Gb_Apu.cpp">
+      <Filter>gb_apu\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gb_apu\Gb_Oscs.cpp">
+      <Filter>gb_apu\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gb_apu\Multi_Buffer.cpp">
+      <Filter>gb_apu\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Basic_Gb_Apu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Sound_Queue.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="changes.txt" />
+    <Text Include="LGPL.txt" />
+    <Text Include="notes.txt" />
+    <Text Include="readme.txt" />
+    <Text Include="usage.txt" />
+  </ItemGroup>
+</Project>

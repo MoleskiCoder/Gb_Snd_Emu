@@ -4,8 +4,7 @@
 
 // Blip_Buffer 0.3.4. Copyright (C) 2003-2005 Shay Green. GNU LGPL license.
 
-#ifndef BLIP_BUFFER_H
-#define BLIP_BUFFER_H
+#pragma once
 
 #include "blargg_common.h"
 
@@ -254,6 +253,3 @@ inline void Blip_Buffer::clock_rate( long cps )
 }
 
 #include "Blip_Synth.h"
-
-#endif
-

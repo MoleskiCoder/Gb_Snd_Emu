@@ -4,8 +4,7 @@
 
 // Blip_Buffer 0.3.4. Copyright (C) 2003-2005 Shay Green. GNU LGPL license.
 
-#ifndef BLIP_SYNTH_H
-#define BLIP_SYNTH_H
+#pragma once
 
 #ifndef BLIP_BUFFER_H
 	#include "Blip_Buffer.h"
@@ -203,6 +202,3 @@ template<int quality,int range>
 void Blip_Synth<quality,range>::offset( blip_time_t time, int delta, Blip_Buffer* buf ) const {
 	offset_resampled( time * buf->factor_ + buf->offset_, delta, buf );
 }
-
-#endif
-

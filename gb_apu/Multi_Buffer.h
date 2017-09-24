@@ -3,8 +3,7 @@
 
 // Blip_Buffer 0.3.4. Copyright (C) 2003-2005 Shay Green. GNU LGPL license.
 
-#ifndef MULTI_BUFFER_H
-#define MULTI_BUFFER_H
+#pragma once
 
 #include "Blip_Buffer.h"
 
@@ -169,6 +168,3 @@ inline void Mono_Buffer::bass_freq( int freq ) { buf.bass_freq( freq ); }
 inline long Mono_Buffer::read_samples( blip_sample_t* p, long s ) { return buf.read_samples( p, s ); }
 
 inline long Mono_Buffer::samples_avail() const { return buf.samples_avail(); }
-
-#endif
-

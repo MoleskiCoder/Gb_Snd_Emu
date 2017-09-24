@@ -3,8 +3,7 @@
 
 // Gb_Snd_Emu 0.1.4. Copyright (C) 2003-2005 Shay Green. GNU LGPL license.
 
-#ifndef BASIC_GB_APU_H
-#define BASIC_GB_APU_H
+#pragma once
 
 #include "gb_apu/Gb_Apu.h"
 #include "gb_apu/Multi_Buffer.h"
@@ -42,6 +41,3 @@ private:
 	// faked CPU timing
 	blip_time_t clock() { return time += 4; }
 };
-
-#endif
-

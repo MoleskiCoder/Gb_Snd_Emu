@@ -3,8 +3,7 @@
 
 // Gb_Snd_Emu 0.1.4. Copyright (C) 2003-2005 Shay Green. GNU LGPL license.
 
-#ifndef GB_APU_H
-#define GB_APU_H
+#pragma once
 
 typedef long     gb_time_t; // clock cycle count
 typedef unsigned gb_addr_t; // 16-bit address
@@ -79,6 +78,3 @@ private:
 inline void Gb_Apu::output( Blip_Buffer* b ) { output( b, NULL, NULL ); }
 	
 inline void Gb_Apu::osc_output( int i, Blip_Buffer* b ) { osc_output( i, b, NULL, NULL ); }
-
-#endif
-

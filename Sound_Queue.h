@@ -3,8 +3,7 @@
 
 // Copyright (C) 2005 Shay Green. MIT license.
 
-#ifndef SOUND_QUEUE_H
-#define SOUND_QUEUE_H
+#pragma once
 
 #include "SDL.h"
 
@@ -46,6 +45,3 @@ private:
 	void fill_buffer( Uint8*, int );
 	static void fill_buffer_( void*, Uint8*, int );
 };
-
-#endif
-

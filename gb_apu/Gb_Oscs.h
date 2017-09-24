@@ -3,8 +3,7 @@
 
 // Gb_Snd_Emu 0.1.4. Copyright (C) 2003-2005 Shay Green. GNU LGPL license.
 
-#ifndef GB_OSCS_H
-#define GB_OSCS_H
+#pragma once
 
 #include "Blip_Buffer.h"
 
@@ -95,6 +94,3 @@ struct Gb_Noise : Gb_Env {
 	void run( gb_time_t, gb_time_t );
 	void write_register( int, int );
 };
-
-#endif
-

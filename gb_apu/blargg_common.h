@@ -6,8 +6,7 @@
 
 // Copyright (C) 2004-2005 Shay Green.
 
-#ifndef BLARGG_COMMON_H
-#define BLARGG_COMMON_H
+#pragma once
 
 // Allow prefix configuration file *which can re-include blargg_common.h*
 // (probably indirectly).
@@ -173,6 +172,3 @@ const blargg_err_t blargg_success = 0;
 	
 	#endif
 #endif
-
-#endif
-

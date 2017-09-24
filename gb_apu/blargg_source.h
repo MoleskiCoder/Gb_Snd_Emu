@@ -3,8 +3,7 @@
 
 // Copyright (C) 2005 Shay Green.
 
-#ifndef BLARGG_SOURCE_H
-#define BLARGG_SOURCE_H
+#pragma once
 
 // If debugging is enabled, abort program if expr is false. Meant for checking
 // internal state and consistency. A failed assertion indicates a bug in the module.
@@ -61,6 +60,3 @@ inline T max( T x, T y )
 		return y;
 	return x;
 }
-
-#endif
-

@@ -32,7 +32,6 @@ static const char* sdl_error( const char* str )
 
 Sound_Queue::Sound_Queue()
 {
-	bufs = NULL;
 	free_sem = NULL;
 	sound_open = false;
 }
@@ -44,16 +43,13 @@ Sound_Queue::~Sound_Queue()
 
 const char* Sound_Queue::start( long sample_rate, int chan_count )
 {
-	assert( !bufs ); // can only be initialized once
-	
 	write_buf = 0;
 	write_pos = 0;
 	read_buf = 0;
 	
-	bufs = new sample_t [(long) buf_size * buf_count];
-	if ( !bufs )
-		return "Out of memory";
-	currently_playing_ = bufs;
+	bufs.resize(buf_size * buf_count);
+
+	currently_playing_ = &bufs[0];
 	
 	free_sem = SDL_CreateSemaphore( buf_count - 1 );
 	if ( !free_sem )
@@ -91,8 +87,7 @@ void Sound_Queue::stop()
 		free_sem = NULL;
 	}
 	
-	delete [] bufs;
-	bufs = NULL;
+	bufs.clear();
 }
 
 int Sound_Queue::sample_count() const
@@ -104,7 +99,7 @@ int Sound_Queue::sample_count() const
 inline Sound_Queue::sample_t* Sound_Queue::buf( int index )
 {
 	assert( (unsigned) index < buf_count );
-	return bufs + (long) index * buf_size;
+	return &bufs[ + (long) index * buf_size];
 }
 
 void Sound_Queue::write( const sample_t* in, int count )

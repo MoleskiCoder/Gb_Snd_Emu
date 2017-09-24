@@ -7,6 +7,8 @@
 
 #include <SDL.h>
 
+#include <vector>
+
 // Simple SDL sound wrapper that has a synchronous interface
 class Sound_Queue {
 public:
@@ -33,7 +35,7 @@ public:
 private:
 	enum { buf_size = 4096 };
 	enum { buf_count = 3 };
-	sample_t* volatile bufs;
+	std::vector<sample_t> bufs;
 	SDL_sem* volatile free_sem;
 	sample_t* volatile currently_playing_;
 	int volatile read_buf;

@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include "SDL.h"
+#include <SDL.h>
 
 // Simple SDL sound wrapper that has a synchronous interface
 class Sound_Queue {

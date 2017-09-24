@@ -3,8 +3,8 @@
 
 #include "Sound_Queue.h"
 
-#include <assert.h>
-#include <string.h>
+#include <cassert>
+#include <string>
 
 /* Copyright (C) 2005 by Shay Green. Permission is hereby granted, free of
 charge, to any person obtaining a copy of this software module and associated

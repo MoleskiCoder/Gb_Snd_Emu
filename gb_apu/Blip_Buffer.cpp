@@ -3,9 +3,8 @@
 
 #include "Blip_Buffer.h"
 
-#include <string.h>
-#include <stddef.h>
-#include <math.h>
+#include <string>
+#include <cstddef>
 
 /* Copyright (C) 2003-2005 Shay Green. This module is free software; you
 can redistribute it and/or modify it under the terms of the GNU Lesser

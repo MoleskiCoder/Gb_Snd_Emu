@@ -46,7 +46,7 @@ void Blip_Buffer::clear( bool entire_buffer )
 
 blargg_err_t Blip_Buffer::set_sample_rate( long new_rate, int msec )
 {
-	unsigned new_size = (ULONG_MAX >> BLIP_BUFFER_ACCURACY) + 1 - widest_impulse_ - 64;
+	unsigned new_size = (std::numeric_limits<unsigned long>::max() >> BLIP_BUFFER_ACCURACY) + 1 - widest_impulse_ - 64;
 	if ( msec != blip_default_length )
 	{
 		size_t s = (new_rate * (msec + 1) + 999) / 1000;
@@ -385,7 +385,7 @@ long Blip_Buffer::read_samples( blip_sample_t* out, long max_samples, bool stere
 			*out++ = (blip_sample_t) s;
 			
 			// clamp sample
-			if ( (BOOST::int16_t) s != s )
+			if ( (int16_t) s != s )
 				out [-1] = blip_sample_t (0x7FFF - (s >> 24));
 		}
 	}
@@ -400,7 +400,7 @@ long Blip_Buffer::read_samples( blip_sample_t* out, long max_samples, bool stere
 			out += 2;
 			
 			// clamp sample
-			if ( (BOOST::int16_t) s != s )
+			if ( (int16_t) s != s )
 				out [-2] = blip_sample_t (0x7FFF - (s >> 24));
 		}
 	}

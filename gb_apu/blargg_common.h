@@ -26,111 +26,13 @@
 	#define BLARGG_SOURCE_BEGIN "blargg_source.h"
 #endif
 
-// Determine compiler's language support
-
-#if defined (__MWERKS__)
-	// Metrowerks CodeWarrior
-	#define BLARGG_COMPILER_HAS_NAMESPACE 1
-	#if !__option(bool)
-		#define BLARGG_COMPILER_HAS_BOOL 0
-	#endif
-
-#elif defined (_MSC_VER)
-	// Microsoft Visual C++
-	#if _MSC_VER < 1100
-		#define BLARGG_COMPILER_HAS_BOOL 0
-	#endif
-
-#elif defined (__GNUC__)
-	// GNU C++
-	#define BLARGG_COMPILER_HAS_NAMESPACE 1
-	#define BLARGG_COMPILER_HAS_BOOL 1
-
-#elif defined (__MINGW32__)
-	// Mingw?
-	#define BLARGG_COMPILER_HAS_BOOL 1
-
-#elif __cplusplus < 199711
-	// Pre-ISO C++ compiler
-	#define BLARGG_COMPILER_HAS_BOOL 0
-	#define STATIC_CAST( type ) (type)
-
-#endif
-
-// STATIC_CAST(T) (expr) -> static_cast< T > (expr)
-#ifndef STATIC_CAST
-	#define STATIC_CAST( type ) static_cast< type >
-#endif
-
-// Set up boost
-#include "boost/config.hpp"
-#ifndef BOOST_MINIMAL
-	#define BOOST boost
-	#ifndef BLARGG_COMPILER_HAS_NAMESPACE
-		#define BLARGG_COMPILER_HAS_NAMESPACE 1
-	#endif
-	#ifndef BLARGG_COMPILER_HAS_BOOL
-		#define BLARGG_COMPILER_HAS_BOOL 1
-	#endif
-#endif
-
-// Bool support
-#ifndef BLARGG_COMPILER_HAS_BOOL
-	#define BLARGG_COMPILER_HAS_BOOL 1
-#elif !BLARGG_COMPILER_HAS_BOOL
-	typedef int bool;
-	const bool true  = 1;
-	const bool false = 0;
-#endif
-
-// Set up namespace support
-
-#ifndef BLARGG_COMPILER_HAS_NAMESPACE
-	#define BLARGG_COMPILER_HAS_NAMESPACE 0
-#endif
-
-#ifndef BLARGG_USE_NAMESPACE
-	#define BLARGG_USE_NAMESPACE BLARGG_COMPILER_HAS_NAMESPACE
-#endif
-
-#ifndef BOOST
-	#if BLARGG_USE_NAMESPACE
-		#define BOOST boost
-	#else
-		#define BOOST
-	#endif
-#endif
-
-#undef BLARGG_BEGIN_NAMESPACE
-#undef BLARGG_END_NAMESPACE
-#if BLARGG_USE_NAMESPACE
-	#define BLARGG_BEGIN_NAMESPACE( name ) namespace name {
-	#define BLARGG_END_NAMESPACE }
-#else
-	#define BLARGG_BEGIN_NAMESPACE( name )
-	#define BLARGG_END_NAMESPACE
-#endif
-
-#if BLARGG_USE_NAMESPACE
-	#define STD std
-#else
-	#define STD
-#endif
-
-// BOOST::uint8_t, BOOST::int16_t, etc.
-#include "boost/cstdint.hpp"
-
-// BOOST_STATIC_ASSERT( expr )
-#include "boost/static_assert.hpp"
+// uint8_t, int16_t, etc.
+#include <cstdint>
 
 // Common standard headers
-#if BLARGG_COMPILER_HAS_NAMESPACE
-	#include <cstddef>
-	#include <cassert>
-#else
-	#include <stddef.h>
-	#include <assert.h>
-#endif
+#include <cstddef>
+#include <cassert>
+#include <limits>
 
 // blargg_err_t (NULL on success, otherwise error string)
 typedef const char* blargg_err_t;

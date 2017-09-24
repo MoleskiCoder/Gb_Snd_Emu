@@ -28,8 +28,8 @@ const int blip_high_quality = 4;
 // the negative of range (i.e. -range).
 template<int quality,int range>
 class Blip_Synth {
-	BOOST_STATIC_ASSERT( 1 <= quality && quality <= 5 );
-	BOOST_STATIC_ASSERT( -32768 <= range && range <= 32767 );
+	static_assert ( 1 <= quality && quality <= 5, "Quality" );
+	static_assert( -32768 <= range && range <= 32767, "Range" );
 	enum {
 		abs_range = (range < 0) ? -range : range,
 		fine_mode = (range > 512 || range < 0),

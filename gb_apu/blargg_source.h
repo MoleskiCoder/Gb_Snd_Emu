@@ -8,7 +8,7 @@
 // If debugging is enabled, abort program if expr is false. Meant for checking
 // internal state and consistency. A failed assertion indicates a bug in the module.
 // void assert( bool expr );
-#include <assert.h>
+#include <cassert>
 
 // If debugging is enabled and expr is false, abort program. Meant for checking
 // caller-supplied parameters and operations that are outside the control of the
@@ -37,26 +37,3 @@
 
 // If ptr is NULL, return out of memory error string.
 #define BLARGG_CHECK_ALLOC( ptr )   do { if ( !(ptr) ) return "Out of memory"; } while ( 0 )
-
-// Avoid any macros which evaluate their arguments multiple times
-#undef min
-#undef max
-
-// using const references generates crappy code, and I am currenly only using these
-// for built-in types, so they take arguments by value
-
-template<class T>
-inline T min( T x, T y )
-{
-	if ( x < y )
-		return x;
-	return y;
-}
-
-template<class T>
-inline T max( T x, T y )
-{
-	if ( x < y )
-		return y;
-	return x;
-}

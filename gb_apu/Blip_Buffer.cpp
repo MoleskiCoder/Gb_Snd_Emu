@@ -22,7 +22,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA */
 Blip_Buffer::Blip_Buffer()
 {
 	samples_per_sec = 44100;
-	buffer_ = NULL;
 	
 	// try to cause assertion failure if buffer is used before these are set
 	clocks_per_sec = 0;
@@ -39,8 +38,8 @@ void Blip_Buffer::clear( bool entire_buffer )
 	long count = (entire_buffer ? buffer_size_ : samples_avail());
 	offset_ = 0;
 	reader_accum = 0;
-	if ( buffer_ )
-		std::fill_n(buffer_, count + widest_impulse_, sample_offset_);
+	if ( !buffer_.empty() )
+		std::fill_n(buffer_.begin(), count + widest_impulse_, sample_offset_);
 }
 
 blargg_err_t Blip_Buffer::set_sample_rate( long new_rate, int msec )
@@ -57,14 +56,11 @@ blargg_err_t Blip_Buffer::set_sample_rate( long new_rate, int msec )
 	
 	if ( buffer_size_ != new_size )
 	{
-		delete [] buffer_;
-		buffer_ = NULL; // allow for exception in allocation below
 		buffer_size_ = 0;
 		offset_ = 0;
 		
 		int const count_clocks_extra = 2;
-		buffer_ = BLARGG_NEW buf_t_ [new_size + widest_impulse_ + count_clocks_extra];
-		BLARGG_CHECK_ALLOC( buffer_ );
+		buffer_.resize(new_size + widest_impulse_ + count_clocks_extra);
 	}
 	
 	buffer_size_ = new_size;
@@ -89,11 +85,6 @@ blip_resampled_time_t Blip_Buffer::clock_rate_factor( long clock_rate ) const
 			(double) samples_per_sec / clock_rate * (1L << BLIP_BUFFER_ACCURACY) + 0.5 );
 	require( factor > 0 ); // clock_rate/sample_rate ratio is too large
 	return factor;
-}
-
-Blip_Buffer::~Blip_Buffer()
-{
-	delete [] buffer_;
 }
 
 void Blip_Buffer::bass_freq( int freq )
@@ -350,10 +341,10 @@ void Blip_Buffer::remove_samples( long count )
 	// copy remaining samples to beginning and clear old samples
 	long remain = samples_avail() + widest_impulse_ + copy_extra;
 	if ( count >= remain )
-		std::move(buffer_ + count, buffer_ + count + remain, buffer_);
+		std::move(buffer_.cbegin() + count, buffer_.cbegin() + count + remain, buffer_.begin());
 	else
-		std::copy_n(buffer_ + count, remain, buffer_);
-	std::fill_n(buffer_ + remain, count, sample_offset_);
+		std::copy_n(buffer_.cbegin() + count, remain, buffer_.begin());
+	std::fill_n(buffer_.begin() + remain, count, sample_offset_);
 }
 
 #include BLARGG_ENABLE_OPTIMIZER
@@ -371,7 +362,7 @@ long Blip_Buffer::read_samples( blip_sample_t* out, long max_samples, bool stere
 	
 	int sample_offset_ = this->sample_offset_;
 	int bass_shift = this->bass_shift;
-	buf_t_* buf = buffer_;
+	auto buf = buffer_.cbegin();
 	long accum = reader_accum;
 	
 	if ( !stereo )

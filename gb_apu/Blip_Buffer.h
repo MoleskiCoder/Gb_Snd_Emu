@@ -8,6 +8,8 @@
 
 #include "blargg_common.h"
 
+#include <vector>
+
 class Blip_Reader;
 
 // Source time unit.
@@ -25,7 +27,6 @@ class Blip_Buffer {
 public:
 	// Construct an empty buffer.
 	Blip_Buffer();
-	~Blip_Buffer();
 	
 	// Set output sample rate and buffer length in milliseconds (1/1000 sec),
 	// then clear buffer. If length is not specified, make as large as possible.
@@ -114,7 +115,7 @@ private:
 		
 		unsigned long factor_;
 		blip_resampled_time_t offset_;
-		buf_t_* buffer_;
+		std::vector<buf_t_> buffer_;
 		unsigned buffer_size_;
 	private:
 		long reader_accum;
@@ -143,7 +144,7 @@ private:
 
 // not documented yet (see Multi_Buffer.cpp for an example of use)
 class Blip_Reader {
-	const Blip_Buffer::buf_t_* buf;
+	std::vector<Blip_Buffer::buf_t_>::const_iterator buf;
 	long accum;
 	#ifdef __MWERKS__
 	void operator = ( struct foobar ); // helps optimizer
@@ -152,7 +153,7 @@ public:
 	// avoid anything which might cause optimizer to put object in memory
 	
 	int begin( Blip_Buffer& blip_buf ) {
-		buf = blip_buf.buffer_;
+		buf = blip_buf.buffer_.cbegin();
 		accum = blip_buf.reader_accum;
 		return blip_buf.bass_shift;
 	}

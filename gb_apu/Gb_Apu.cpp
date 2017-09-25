@@ -70,7 +70,7 @@ void Gb_Apu::reset()
 	wave.reset();
 	noise.reset();
 	
-	memset( regs, 0, sizeof regs );
+	std::fill_n(regs, (int)register_count, 0);
 }
 
 void Gb_Apu::osc_output( int index, Blip_Buffer* center, Blip_Buffer* left, Blip_Buffer* right )

@@ -255,7 +255,7 @@ void Gb_Wave::reset()
 	volume_shift = 0;
 	wave_pos = 0;
 	new_length = 0;
-	memset( wave, 0, sizeof wave );
+	std::fill_n(wave, (int)wave_size, 0);
 	Gb_Osc::reset();
 }
 

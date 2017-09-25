@@ -40,7 +40,7 @@ void Blip_Buffer::clear( bool entire_buffer )
 	offset_ = 0;
 	reader_accum = 0;
 	if ( buffer_ )
-		memset( buffer_, sample_offset_ & 0xFF, (count + widest_impulse_) * sizeof (buf_t_) );
+		std::fill_n(buffer_, count + widest_impulse_, sample_offset_);
 }
 
 blargg_err_t Blip_Buffer::set_sample_rate( long new_rate, int msec )
@@ -173,7 +173,7 @@ void Blip_Impulse_::scale_impulse( int unit, imp_t* imp_in ) const
 	
 	// copy to odd offset
 	*imp++ = (imp_t) unit;
-	memcpy( imp, imp_in, (res * width - 1) * sizeof *imp );
+	std::copy_n(imp_in, res * width - 1, imp);
 	
 	/*
 	for ( int i = 0; i < res; i++ )
@@ -350,10 +350,10 @@ void Blip_Buffer::remove_samples( long count )
 	// copy remaining samples to beginning and clear old samples
 	long remain = samples_avail() + widest_impulse_ + copy_extra;
 	if ( count >= remain )
-		memmove( buffer_, buffer_ + count, remain * sizeof (buf_t_) );
+		std::move(buffer_ + count, buffer_ + count + remain, buffer_);
 	else
-		memcpy(  buffer_, buffer_ + count, remain * sizeof (buf_t_) );
-	memset( buffer_ + remain, sample_offset_ & 0xFF, count * sizeof (buf_t_) );
+		std::copy_n(buffer_ + count, remain, buffer_);
+	std::fill_n(buffer_ + remain, count, sample_offset_);
 }
 
 #include BLARGG_ENABLE_OPTIMIZER

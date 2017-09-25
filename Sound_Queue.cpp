@@ -110,7 +110,7 @@ void Sound_Queue::write( const sample_t* in, int count )
 		if ( n > count )
 			n = count;
 		
-		memcpy( buf( write_buf ) + write_pos, in, n * sizeof (sample_t) );
+		std::copy_n(in, n, buf(write_buf) + write_pos);
 		in += n;
 		write_pos += n;
 		count -= n;
@@ -129,13 +129,13 @@ void Sound_Queue::fill_buffer( Uint8* out, int count )
 	if ( SDL_SemValue( free_sem ) < buf_count - 1 )
 	{
 		currently_playing_ = buf( read_buf );
-		memcpy( out, buf( read_buf ), count );
+		std::copy_n((Uint8*)buf(read_buf), count, out);
 		read_buf = (read_buf + 1) % buf_count;
 		SDL_SemPost( free_sem );
 	}
 	else
 	{
-		memset( out, 0, count );
+		std::fill_n(out, count, 0);
 	}
 }
 

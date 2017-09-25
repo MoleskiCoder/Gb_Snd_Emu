@@ -326,8 +326,6 @@ void Blip_Impulse_::treble_eq( const blip_eq_t& new_eq )
 
 void Blip_Buffer::remove_samples( long count )
 {
-	require( buffer_ ); // sample rate must have been set
-	
 	if ( !count ) // optimization
 		return;
 	
@@ -351,8 +349,6 @@ void Blip_Buffer::remove_samples( long count )
 
 long Blip_Buffer::read_samples( blip_sample_t* out, long max_samples, bool stereo )
 {
-	require( buffer_ ); // sample rate must have been set
-	
 	long count = samples_avail();
 	if ( count > max_samples )
 		count = max_samples;

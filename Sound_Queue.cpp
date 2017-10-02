@@ -5,6 +5,7 @@
 
 #include <cassert>
 #include <string>
+#include <algorithm>
 
 /* Copyright (C) 2005 by Shay Green. Permission is hereby granted, free of
 charge, to any person obtaining a copy of this software module and associated

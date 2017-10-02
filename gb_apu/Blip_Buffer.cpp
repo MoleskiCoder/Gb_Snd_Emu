@@ -5,6 +5,8 @@
 
 #include <string>
 #include <cstddef>
+#include <cmath>
+#include <algorithm>
 
 /* Copyright (C) 2003-2005 Shay Green. This module is free software; you
 can redistribute it and/or modify it under the terms of the GNU Lesser
@@ -81,7 +83,7 @@ blargg_err_t Blip_Buffer::set_sample_rate( long new_rate, int msec )
 
 blip_resampled_time_t Blip_Buffer::clock_rate_factor( long clock_rate ) const
 {
-	blip_resampled_time_t factor = (unsigned long) floor(
+	blip_resampled_time_t factor = (unsigned long) std::floor(
 			(double) samples_per_sec / clock_rate * (1L << BLIP_BUFFER_ACCURACY) + 0.5 );
 	require( factor > 0 ); // clock_rate/sample_rate ratio is too large
 	return factor;
@@ -95,7 +97,7 @@ void Blip_Buffer::bass_freq( int freq )
 		bass_shift = 31; // 32 or greater invokes undefined behavior elsewhere
 		return;
 	}
-	bass_shift = 1 + (int) floor( 1.442695041 * log( 0.124 * samples_per_sec / freq ) );
+	bass_shift = 1 + (int) std::floor( 1.442695041 * std::log( 0.124 * samples_per_sec / freq ) );
 	if ( bass_shift < 0 )
 		bass_shift = 0;
 	if ( bass_shift > 24 )
@@ -208,7 +210,7 @@ void Blip_Impulse_::volume_unit( double new_unit )
 	
 	volume_unit_ = new_unit;
 	
-	offset = 0x10001 * (unsigned long) floor( volume_unit_ * 0x10000 + 0.5 );
+	offset = 0x10001 * (unsigned long) std::floor( volume_unit_ * 0x10000 + 0.5 );
 	
 	if ( fine_bits )
 		fine_volume_unit();
@@ -311,7 +313,7 @@ void Blip_Impulse_::treble_eq( const blip_eq_t& new_eq )
 				if ( index < size )
 					sum += buf [index];
 			}
-			*imp++ = (imp_t) floor( sum * factor + (impulse_offset + 0.5) );
+			*imp++ = (imp_t) std::floor( sum * factor + (impulse_offset + 0.5) );
 		}
 	}
 	

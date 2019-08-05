@@ -69,12 +69,6 @@ public:
 		return long(offset_ >> BLIP_BUFFER_ACCURACY);
 	}
 	
-	// Read at most 'max_samples' out of buffer into 'dest', removing them from from
-	// the buffer. Return number of samples actually read and removed. If stereo is
-	// true, increment 'dest' one extra time after writing each sample, to allow
-	// easy interleving of two channels into a stereo output buffer.
-	long read_samples( int16_t* dest, long max_samples, bool stereo = false );
-	
 	// Remove 'count' samples from those waiting to be read
 	void remove_samples( long count );
 	

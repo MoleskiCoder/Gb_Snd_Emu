@@ -20,5 +20,4 @@ public:
 	channel_t channel(int);
 	void end_frame(long, bool unused = true);
 	long samples_avail() const { return buf.samples_avail(); }
-	long read_samples(int16_t* p, long s) { return buf.read_samples(p, s); }
 };

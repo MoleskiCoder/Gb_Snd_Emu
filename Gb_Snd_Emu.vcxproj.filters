@@ -47,6 +47,18 @@
     <ClInclude Include="Sound_Queue.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="gb_apu\blip_eq_t.h">
+      <Filter>gb_apu\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gb_apu\Blip_Impulse_.h">
+      <Filter>gb_apu\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gb_apu\Blip_Reader.h">
+      <Filter>gb_apu\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gb_apu\Blip_Wave.h">
+      <Filter>gb_apu\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gb_apu\Blip_Buffer.cpp">
@@ -66,6 +78,9 @@
     </ClCompile>
     <ClCompile Include="Sound_Queue.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gb_apu\Blip_Impulse_.cpp">
+      <Filter>gb_apu\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -2,6 +2,7 @@
 // Blip_Buffer 0.3.4. http://www.slack.net/~ant/libs/
 
 #include "Multi_Buffer.h"
+#include "Blip_Reader.h"
 
 /* Copyright (C) 2003-2005 Shay Green. This module is free software; you
 can redistribute it and/or modify it under the terms of the GNU Lesser
@@ -152,8 +153,6 @@ long Stereo_Buffer::read_samples( int16_t* out, long count )
 	
 	return count * 2;
 }
-
-#include BLARGG_ENABLE_OPTIMIZER
 
 void Stereo_Buffer::mix_stereo( int16_t* out, long count )
 {

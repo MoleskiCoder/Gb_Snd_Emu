@@ -7,10 +7,9 @@
 #pragma once
 
 #include "blargg_common.h"
+#include "blip_eq_t.h"
 
 #include <vector>
-
-class Blip_Reader;
 
 class Blip_Buffer {
 public:
@@ -145,70 +144,6 @@ private:
 		friend class Blip_Reader;
 };
 
-// Low-pass equalization parameters (see notes.txt)
-class blip_eq_t {
-public:
-	blip_eq_t(double t = 0)
-		: treble(t), cutoff(0), sample_rate(44100) {}
-	blip_eq_t(double t, long c, long sr)
-		: treble(t), cutoff(c), sample_rate(sr) {}
-private:
-	double treble;
-	long cutoff;
-	long sample_rate;
-	friend class Blip_Impulse_;
-};
-
-// not documented yet (see Multi_Buffer.cpp for an example of use)
-class Blip_Reader {
-	std::vector<uint16_t>::const_iterator buf;
-	long accum;
-public:
-	// avoid anything which might cause optimizer to put object in memory
-	
-	int begin( Blip_Buffer& blip_buf ) {
-		buf = blip_buf.buffer_.cbegin();
-		accum = blip_buf.reader_accum;
-		return blip_buf.bass_shift;
-	}
-	
-	int read() const {
-		return accum >> Blip_Buffer::accum_fract;
-	}
-	
-	void next( int bass_shift = 9 ) {
-		accum -= accum >> bass_shift;
-		accum += ((long) *buf++ - Blip_Buffer::sample_offset_) << Blip_Buffer::accum_fract;
-	}
-	
-	void end( Blip_Buffer& blip_buf ) {
-		blip_buf.reader_accum = accum;
-	}
-};
-
-
-
 // End of public interface
-	
-class Blip_Impulse_ {
-	blip_eq_t eq;
-	double  volume_unit_;
-	uint16_t*  impulses;
-	uint16_t*  impulse;
-	int     width;
-	int     fine_bits;
-	int     res;
-	bool    generate;
-	
-	void fine_volume_unit();
-	void scale_impulse( int unit, uint16_t* ) const;
-public:
-	Blip_Buffer*    buf;
-	uint32_t offset;
-	
-	void init( uint32_t* impulses, int width, int res, int fine_bits = 0 );
-	void volume_unit( double );
-	void treble_eq( const blip_eq_t& );
-};
 
 #include "Blip_Synth.h"

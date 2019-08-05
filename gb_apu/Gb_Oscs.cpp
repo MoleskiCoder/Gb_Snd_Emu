@@ -394,8 +394,6 @@ void Gb_Noise::write_register( int reg, int value )
 	Gb_Env::write_register( reg, value );
 }
 
-#include BLARGG_ENABLE_OPTIMIZER
-
 void Gb_Noise::run( long time, long end_time )
 {
 	if ( !enabled || (!length && length_enabled) || !volume ) {

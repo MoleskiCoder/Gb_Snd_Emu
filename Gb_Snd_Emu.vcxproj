@@ -135,7 +135,11 @@
     <ClInclude Include="gb_apu\blargg_common.h" />
     <ClInclude Include="gb_apu\blargg_source.h" />
     <ClInclude Include="gb_apu\Blip_Buffer.h" />
+    <ClInclude Include="gb_apu\blip_eq_t.h" />
+    <ClInclude Include="gb_apu\Blip_Impulse_.h" />
+    <ClInclude Include="gb_apu\Blip_Reader.h" />
     <ClInclude Include="gb_apu\Blip_Synth.h" />
+    <ClInclude Include="gb_apu\Blip_Wave.h" />
     <ClInclude Include="gb_apu\Gb_Apu.h" />
     <ClInclude Include="gb_apu\Gb_Oscs.h" />
     <ClInclude Include="gb_apu\Multi_Buffer.h" />
@@ -144,6 +148,7 @@
   <ItemGroup>
     <ClCompile Include="Basic_Gb_Apu.cpp" />
     <ClCompile Include="gb_apu\Blip_Buffer.cpp" />
+    <ClCompile Include="gb_apu\Blip_Impulse_.cpp" />
     <ClCompile Include="gb_apu\Gb_Apu.cpp" />
     <ClCompile Include="gb_apu\Gb_Oscs.cpp" />
     <ClCompile Include="gb_apu\Multi_Buffer.cpp" />

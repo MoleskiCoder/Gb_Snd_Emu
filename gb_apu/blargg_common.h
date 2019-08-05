@@ -8,11 +8,6 @@
 
 #pragma once
 
-// Source files use #include BLARGG_ENABLE_OPTIMIZER before performance-critical code
-#ifndef BLARGG_ENABLE_OPTIMIZER
-	#define BLARGG_ENABLE_OPTIMIZER "blargg_common.h"
-#endif
-
 // Source files have #include BLARGG_SOURCE_BEGIN at the beginning
 #ifndef BLARGG_SOURCE_BEGIN
 	#define BLARGG_SOURCE_BEGIN "blargg_source.h"

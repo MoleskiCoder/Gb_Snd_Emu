@@ -7,9 +7,19 @@
 
 #include "Blip_Buffer.h"
 
-enum { gb_apu_max_vol = 7 };
-
 struct Gb_Osc {
+
+	enum { gb_apu_max_vol = 7 };
+
+	// Quality level. Higher levels are slower, and worse in a few cases.
+	// Use blip_good_quality as a starting point.
+	enum {
+		blip_low_quality = 1,
+		blip_med_quality = 2,
+		blip_good_quality = 3,
+		blip_high_quality = 4,
+	};
+
 	Blip_Buffer* outputs [4]; // NULL, right, left, center
 	Blip_Buffer* output;
 	int output_select;

@@ -8,14 +8,6 @@
 
 #pragma once
 
-// Allow prefix configuration file *which can re-include blargg_common.h*
-// (probably indirectly).
-#ifdef HAVE_CONFIG_H
-	#undef BLARGG_COMMON_H
-	#include "config.h"
-	#define BLARGG_COMMON_H
-#endif
-
 // Source files use #include BLARGG_ENABLE_OPTIMIZER before performance-critical code
 #ifndef BLARGG_ENABLE_OPTIMIZER
 	#define BLARGG_ENABLE_OPTIMIZER "blargg_common.h"

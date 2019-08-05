@@ -59,6 +59,15 @@
     <ClInclude Include="gb_apu\Blip_Wave.h">
       <Filter>gb_apu\Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="gb_apu\Stereo_Buffer.h">
+      <Filter>gb_apu\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gb_apu\Mono_Buffer.h">
+      <Filter>gb_apu\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gb_apu\Silent_Buffer.h">
+      <Filter>gb_apu\Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="gb_apu\Blip_Buffer.cpp">
@@ -80,6 +89,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="gb_apu\Blip_Impulse_.cpp">
+      <Filter>gb_apu\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gb_apu\Silent_Buffer.cpp">
+      <Filter>gb_apu\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gb_apu\Stereo_Buffer.cpp">
+      <Filter>gb_apu\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gb_apu\Mono_Buffer.cpp">
       <Filter>gb_apu\Source Files</Filter>
     </ClCompile>
   </ItemGroup>

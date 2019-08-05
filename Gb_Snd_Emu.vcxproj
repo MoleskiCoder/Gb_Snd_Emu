@@ -142,7 +142,10 @@
     <ClInclude Include="gb_apu\Blip_Wave.h" />
     <ClInclude Include="gb_apu\Gb_Apu.h" />
     <ClInclude Include="gb_apu\Gb_Oscs.h" />
+    <ClInclude Include="gb_apu\Mono_Buffer.h" />
     <ClInclude Include="gb_apu\Multi_Buffer.h" />
+    <ClInclude Include="gb_apu\Silent_Buffer.h" />
+    <ClInclude Include="gb_apu\Stereo_Buffer.h" />
     <ClInclude Include="Sound_Queue.h" />
   </ItemGroup>
   <ItemGroup>
@@ -151,7 +154,10 @@
     <ClCompile Include="gb_apu\Blip_Impulse_.cpp" />
     <ClCompile Include="gb_apu\Gb_Apu.cpp" />
     <ClCompile Include="gb_apu\Gb_Oscs.cpp" />
+    <ClCompile Include="gb_apu\Mono_Buffer.cpp" />
     <ClCompile Include="gb_apu\Multi_Buffer.cpp" />
+    <ClCompile Include="gb_apu\Silent_Buffer.cpp" />
+    <ClCompile Include="gb_apu\Stereo_Buffer.cpp" />
     <ClCompile Include="Sound_Queue.cpp" />
   </ItemGroup>
   <ItemGroup>

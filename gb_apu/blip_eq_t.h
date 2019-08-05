@@ -7,9 +7,7 @@ public:
 		: treble(t), cutoff(0), sample_rate(44100) {}
 	blip_eq_t(double t, long c, long sr)
 		: treble(t), cutoff(c), sample_rate(sr) {}
-private:
 	double treble;
 	long cutoff;
 	long sample_rate;
-	friend class Blip_Impulse_;
 };

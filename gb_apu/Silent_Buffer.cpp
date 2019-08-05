@@ -1,8 +1,4 @@
-
-// Blip_Buffer 0.3.4. http://www.slack.net/~ant/libs/
-
-#include "Multi_Buffer.h"
-#include "Blip_Reader.h"
+#include "Silent_Buffer.h"
 
 /* Copyright (C) 2003-2005 Shay Green. This module is free software; you
 can redistribute it and/or modify it under the terms of the GNU Lesser
@@ -15,14 +11,12 @@ more details. You should have received a copy of the GNU Lesser General
 Public License along with this module; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA */
 
-#include BLARGG_SOURCE_BEGIN
+// Silent_Buffer
 
-Multi_Buffer::Multi_Buffer( int spf ) : samples_per_frame_( spf ) {
-	length_ = 0;
-	sample_rate_ = 0;
-	channels_changed_count_ = 1;
+Silent_Buffer::Silent_Buffer() : Multi_Buffer(1) // 0 channels would probably confuse
+{
+	chan.left = NULL;
+	chan.center = NULL;
+	chan.right = NULL;
 }
 
-blargg_err_t Multi_Buffer::set_channel_count( int ) {
-	return blargg_success;
-}

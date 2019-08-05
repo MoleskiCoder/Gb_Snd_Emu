@@ -6,7 +6,7 @@
 #pragma once
 
 #include "gb_apu/Gb_Apu.h"
-#include "gb_apu/Multi_Buffer.h"
+#include "gb_apu/Stereo_Buffer.h"
 
 class Basic_Gb_Apu {
 public:

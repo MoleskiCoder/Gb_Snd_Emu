@@ -1,8 +1,4 @@
-
-// Blip_Buffer 0.3.4. http://www.slack.net/~ant/libs/
-
-#include "Multi_Buffer.h"
-#include "Blip_Reader.h"
+#include "Mono_Buffer.h"
 
 /* Copyright (C) 2003-2005 Shay Green. This module is free software; you
 can redistribute it and/or modify it under the terms of the GNU Lesser
@@ -17,12 +13,28 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA */
 
 #include BLARGG_SOURCE_BEGIN
 
-Multi_Buffer::Multi_Buffer( int spf ) : samples_per_frame_( spf ) {
-	length_ = 0;
-	sample_rate_ = 0;
-	channels_changed_count_ = 1;
+Mono_Buffer::Mono_Buffer() : Multi_Buffer(1) {
 }
 
-blargg_err_t Multi_Buffer::set_channel_count( int ) {
-	return blargg_success;
+Mono_Buffer::~Mono_Buffer() {
 }
+
+blargg_err_t Mono_Buffer::set_sample_rate(long rate, int msec) {
+	BLARGG_RETURN_ERR(buf.set_sample_rate(rate, msec));
+	return Multi_Buffer::set_sample_rate(buf.sample_rate(), buf.length());
+}
+
+// Mono_Buffer
+
+Mono_Buffer::channel_t Mono_Buffer::channel(int index) {
+	channel_t ch;
+	ch.center = &buf;
+	ch.left = &buf;
+	ch.right = &buf;
+	return ch;
+}
+
+void Mono_Buffer::end_frame(long t, bool) {
+	buf.end_frame(t);
+}
+

@@ -83,20 +83,6 @@ public:
 		return widest_impulse_ / 2;
 	}
 	
-// Beta features
-	
-	// Number of raw samples that can be mixed within frame of specified duration
-	long count_samples( long duration ) const;
-	
-	// Mix 'count' samples from 'buf' into buffer.
-	void mix_samples( const int16_t* buf, long count );
-	
-	// Count number of clocks needed until 'count' samples will be available.
-	// If buffer can't even hold 'count' samples, returns number of clocks until
-	// buffer is full.
-	long count_clocks( long count ) const;
-	
-	
 	// not documented yet
 	
 	void remove_silence( long count ) {

@@ -104,19 +104,6 @@ void Blip_Buffer::bass_freq( int freq )
 		bass_shift = 24;
 }
 
-long Blip_Buffer::count_samples( long t ) const
-{
-	return (resampled_time( t ) >> BLIP_BUFFER_ACCURACY) - (offset_ >> BLIP_BUFFER_ACCURACY);
-}
-
-long Blip_Buffer::count_clocks( long count ) const
-{
-	if ( count > buffer_size_ )
-		count = buffer_size_;
-	
-	return ((count << BLIP_BUFFER_ACCURACY) - offset_ + (factor_ - 1)) / factor_;
-}
-
 void Blip_Buffer::remove_samples( long count )
 {
 	if ( !count ) // optimization
@@ -188,19 +175,3 @@ long Blip_Buffer::read_samples( int16_t* out, long max_samples, bool stereo )
 	
 	return count;
 }
-
-void Blip_Buffer::mix_samples( const int16_t* in, long count )
-{
-	uint16_t* buf = &buffer_ [(offset_ >> BLIP_BUFFER_ACCURACY) + (widest_impulse_ / 2 - 1)];
-	
-	int prev = 0;
-	while ( count-- )
-	{
-		int s = *in++;
-		*buf += s - prev;
-		prev = s;
-		++buf;
-	}
-	*buf -= *--in;
-}
-

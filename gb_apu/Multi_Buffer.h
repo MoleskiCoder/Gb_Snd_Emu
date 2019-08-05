@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include <vector>
+
 #include "Blip_Buffer.h"
 
 // Interface to one or more Blip_Buffers mapped to one or more channels
@@ -53,7 +55,7 @@ public:
 	unsigned channels_changed_count() { return channels_changed_count_; }
 	
 	// See Blip_Buffer.h
-	virtual long read_samples( int16_t*, long ) = 0;
+	virtual long read_samples( std::vector<int16_t>& ) = 0;
 	virtual long samples_avail() const = 0;
 	
 protected:

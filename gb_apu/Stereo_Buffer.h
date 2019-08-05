@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 #include "Multi_Buffer.h"
 
 // Uses three buffers (one for center) and outputs stereo sample pairs.
@@ -22,7 +24,7 @@ public:
 	void end_frame(long, bool added_stereo = true);
 
 	long samples_avail() const { return bufs[0].samples_avail() * 2; }
-	long read_samples(int16_t*, long);
+	long read_samples(std::vector<int16_t>&);
 
 private:
 	enum { buf_count = 3 };
@@ -31,6 +33,6 @@ private:
 	bool stereo_added;
 	bool was_stereo;
 
-	void mix_stereo(int16_t*, long);
-	void mix_mono(int16_t*, long);
+	void mix_stereo(std::vector<int16_t>& out);
+	void mix_mono(std::vector<int16_t>& out);
 };

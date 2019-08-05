@@ -58,8 +58,8 @@ long Basic_Gb_Apu::samples_avail() const
 	return buf.samples_avail();
 }
 
-long Basic_Gb_Apu::read_samples( int16_t* out, long count )
+long Basic_Gb_Apu::read_samples(std::vector<int16_t>& out)
 {
-	return buf.read_samples( out, count );
+	return buf.read_samples( out );
 }
 

@@ -8,6 +8,8 @@
 #include "gb_apu/Gb_Apu.h"
 #include "gb_apu/Stereo_Buffer.h"
 
+#include <vector>
+
 class Basic_Gb_Apu {
 public:
 	Basic_Gb_Apu();
@@ -30,7 +32,7 @@ public:
 	long samples_avail() const;
 	
 	// Read at most 'count' samples out of buffer and return number actually read
-	long read_samples( int16_t* out, long count );
+	long read_samples( std::vector<int16_t>& out );
 	
 private:
 	Gb_Apu apu;

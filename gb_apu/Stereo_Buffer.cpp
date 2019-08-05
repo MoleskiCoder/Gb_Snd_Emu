@@ -62,8 +62,9 @@ void Stereo_Buffer::end_frame(long clock_count, bool stereo)
 	stereo_added |= stereo;
 }
 
-long Stereo_Buffer::read_samples(int16_t* out, long count)
+long Stereo_Buffer::read_samples(std::vector<int16_t>& out)
 {
+	long count = out.size();
 	require(!(count & 1)); // count must be even
 	count = (unsigned)count / 2;
 
@@ -74,7 +75,7 @@ long Stereo_Buffer::read_samples(int16_t* out, long count)
 	{
 		if (stereo_added || was_stereo)
 		{
-			mix_stereo(out, count);
+			mix_stereo(out);
 
 			bufs[0].remove_samples(count);
 			bufs[1].remove_samples(count);
@@ -82,7 +83,7 @@ long Stereo_Buffer::read_samples(int16_t* out, long count)
 		}
 		else
 		{
-			mix_mono(out, count);
+			mix_mono(out);
 
 			bufs[0].remove_samples(count);
 
@@ -100,7 +101,7 @@ long Stereo_Buffer::read_samples(int16_t* out, long count)
 	return count * 2;
 }
 
-void Stereo_Buffer::mix_stereo(int16_t* out, long count)
+void Stereo_Buffer::mix_stereo(std::vector<int16_t>& out)
 {
 	Blip_Reader left;
 	Blip_Reader right;
@@ -110,15 +111,17 @@ void Stereo_Buffer::mix_stereo(int16_t* out, long count)
 	right.begin(bufs[2]);
 	int bass = center.begin(bufs[0]);
 
+	long offset = 0;
+	long count = out.size() / 2;
+
 	while (count--)
 	{
 		int c = center.read();
 		long l = c + left.read();
 		long r = c + right.read();
 		center.next(bass);
-		out[0] = l;
-		out[1] = r;
-		out += 2;
+		out[offset++] = l;
+		out[offset++] = r;
 
 		if ((int16_t)l != l)
 			out[-2] = 0x7FFF - (l >> 24);
@@ -135,23 +138,25 @@ void Stereo_Buffer::mix_stereo(int16_t* out, long count)
 	left.end(bufs[1]);
 }
 
-void Stereo_Buffer::mix_mono(int16_t* out, long count)
+void Stereo_Buffer::mix_mono(std::vector<int16_t>& out)
 {
 	Blip_Reader in;
 	int bass = in.begin(bufs[0]);
+
+	long offset = 0;
+	long count = out.size() / 2;
 
 	while (count--)
 	{
 		long s = in.read();
 		in.next(bass);
-		out[0] = s;
-		out[1] = s;
-		out += 2;
+		out[offset++] = s;
+		out[offset++] = s;
 
 		if ((int16_t)s != s) {
 			s = 0x7FFF - (s >> 24);
-			out[-2] = s;
-			out[-1] = s;
+			out[offset-2] = s;
+			out[offset-1] = s;
 		}
 	}
 

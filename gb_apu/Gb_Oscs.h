@@ -29,7 +29,7 @@ struct Gb_Osc {
 	
 	void clock_length();
 	void reset();
-	virtual void run( gb_time_t begin, gb_time_t end ) = 0;
+	virtual void run( long begin, long end ) = 0;
 	virtual void write_register( int reg, int value );
 };
 
@@ -61,7 +61,7 @@ struct Gb_Square : Gb_Env {
 	
 	Gb_Square();
 	void reset();
-	void run( gb_time_t, gb_time_t );
+	void run( long, long );
 	void write_register( int, int );
 	void clock_sweep();
 };
@@ -78,7 +78,7 @@ struct Gb_Wave : Gb_Osc {
 	
 	Gb_Wave();
 	void reset();
-	void run( gb_time_t, gb_time_t );
+	void run( long, long );
 	void write_register( int, int );
 };
 
@@ -91,6 +91,6 @@ struct Gb_Noise : Gb_Env {
 	
 	Gb_Noise();
 	void reset();
-	void run( gb_time_t, gb_time_t );
+	void run( long, long );
 	void write_register( int, int );
 };

@@ -81,9 +81,9 @@ blargg_err_t Blip_Buffer::set_sample_rate( long new_rate, int msec )
 	return blargg_success;
 }
 
-blip_resampled_time_t Blip_Buffer::clock_rate_factor( long clock_rate ) const
+unsigned long Blip_Buffer::clock_rate_factor( long clock_rate ) const
 {
-	blip_resampled_time_t factor = (unsigned long) std::floor(
+	unsigned long factor = (unsigned long) std::floor(
 			(double) samples_per_sec / clock_rate * (1L << BLIP_BUFFER_ACCURACY) + 0.5 );
 	require( factor > 0 ); // clock_rate/sample_rate ratio is too large
 	return factor;
@@ -104,12 +104,12 @@ void Blip_Buffer::bass_freq( int freq )
 		bass_shift = 24;
 }
 
-long Blip_Buffer::count_samples( blip_time_t t ) const
+long Blip_Buffer::count_samples( long t ) const
 {
 	return (resampled_time( t ) >> BLIP_BUFFER_ACCURACY) - (offset_ >> BLIP_BUFFER_ACCURACY);
 }
 
-blip_time_t Blip_Buffer::count_clocks( long count ) const
+long Blip_Buffer::count_clocks( long count ) const
 {
 	if ( count > buffer_size_ )
 		count = buffer_size_;
@@ -117,11 +117,11 @@ blip_time_t Blip_Buffer::count_clocks( long count ) const
 	return ((count << BLIP_BUFFER_ACCURACY) - offset_ + (factor_ - 1)) / factor_;
 }
 
-void Blip_Impulse_::init( blip_pair_t_* imps, int w, int r, int fb )
+void Blip_Impulse_::init( uint32_t* imps, int w, int r, int fb )
 {
 	fine_bits = fb;
 	width = w;
-	impulses = (imp_t*) imps;
+	impulses = (uint16_t*) imps;
 	generate = true;
 	volume_unit_ = -1.0;
 	res = r;
@@ -135,12 +135,12 @@ const int impulse_bits = 15;
 const long impulse_amp = 1L << impulse_bits;
 const long impulse_offset = impulse_amp / 2;
 
-void Blip_Impulse_::scale_impulse( int unit, imp_t* imp_in ) const
+void Blip_Impulse_::scale_impulse( int unit, uint16_t* imp_in ) const
 {
 	long offset = ((long) unit << impulse_bits) - impulse_offset * unit +
 			(1 << (impulse_bits - 1));
-	imp_t* imp = imp_in;
-	imp_t* fimp = impulse;
+	uint16_t* imp = imp_in;
+	uint16_t* fimp = impulse;
 	for ( int n = res / 2 + 1; n--; )
 	{
 		int error = unit;
@@ -148,24 +148,24 @@ void Blip_Impulse_::scale_impulse( int unit, imp_t* imp_in ) const
 		{
 			long a = ((long) *fimp++ * unit + offset) >> impulse_bits;
 			error -= a - unit;
-			*imp++ = (imp_t) a;
+			*imp++ = (uint16_t) a;
 		}
 		
 		// add error to middle
-		imp [-width / 2 - 1] += (imp_t) error;
+		imp [-width / 2 - 1] += (uint16_t) error;
 	}
 	
 	if ( res > 2 )
 	{
 		// second half is mirror-image
-		const imp_t* rev = imp - width - 1;
+		const uint16_t* rev = imp - width - 1;
 		for ( int nn = (res / 2 - 1) * width - 1; nn--; )
 			*imp++ = *--rev;
-		*imp++ = (imp_t) unit;
+		*imp++ = (uint16_t) unit;
 	}
 	
 	// copy to odd offset
-	*imp++ = (imp_t) unit;
+	*imp++ = (uint16_t) unit;
 	std::copy_n(imp_in, res * width - 1, imp);
 	
 	/*
@@ -183,14 +183,14 @@ void Blip_Impulse_::fine_volume_unit()
 {
 	// to do: find way of merging in-place without temporary buffer
 	
-	imp_t temp [max_res * 2 * Blip_Buffer::widest_impulse_];
+	uint16_t temp [max_res * 2 * Blip_Buffer::widest_impulse_];
 	scale_impulse( (offset & 0xffff) << fine_bits, temp );
-	imp_t* imp2 = impulses + res * 2 * width;
+	uint16_t* imp2 = impulses + res * 2 * width;
 	scale_impulse( offset & 0xffff, imp2 );
 	
 	// merge impulses
-	imp_t* imp = impulses;
-	imp_t* src2 = temp;
+	uint16_t* imp = impulses;
+	uint16_t* src2 = temp;
 	for ( int n = res / 2 * 2 * width; n--; )
 	{
 		*imp++ = *imp2++;
@@ -297,7 +297,7 @@ void Blip_Impulse_::treble_eq( const blip_eq_t& new_eq )
 	
 	// integrate runs of length 'max_res'
 	double factor = impulse_amp * 0.5 / total; // 0.5 accounts for other mirrored half
-	imp_t* imp = impulse;
+	uint16_t* imp = impulse;
 	const int step = max_res / res;
 	int offset = res > 1 ? max_res : max_res / 2;
 	for ( int n = res / 2 + 1; n--; offset -= step )
@@ -313,7 +313,7 @@ void Blip_Impulse_::treble_eq( const blip_eq_t& new_eq )
 				if ( index < size )
 					sum += buf [index];
 			}
-			*imp++ = (imp_t) std::floor( sum * factor + (impulse_offset + 0.5) );
+			*imp++ = (uint16_t) std::floor( sum * factor + (impulse_offset + 0.5) );
 		}
 	}
 	
@@ -349,7 +349,7 @@ void Blip_Buffer::remove_samples( long count )
 
 #include BLARGG_ENABLE_OPTIMIZER
 
-long Blip_Buffer::read_samples( blip_sample_t* out, long max_samples, bool stereo )
+long Blip_Buffer::read_samples( int16_t* out, long max_samples, bool stereo )
 {
 	long count = samples_avail();
 	if ( count > max_samples )
@@ -370,11 +370,11 @@ long Blip_Buffer::read_samples( blip_sample_t* out, long max_samples, bool stere
 			long s = accum >> accum_fract;
 			accum -= accum >> bass_shift;
 			accum += (long (*buf++) - sample_offset_) << accum_fract;
-			*out++ = (blip_sample_t) s;
+			*out++ = (int16_t) s;
 			
 			// clamp sample
 			if ( (int16_t) s != s )
-				out [-1] = blip_sample_t (0x7FFF - (s >> 24));
+				out [-1] = int16_t (0x7FFF - (s >> 24));
 		}
 	}
 	else
@@ -384,12 +384,12 @@ long Blip_Buffer::read_samples( blip_sample_t* out, long max_samples, bool stere
 			long s = accum >> accum_fract;
 			accum -= accum >> bass_shift;
 			accum += (long (*buf++) - sample_offset_) << accum_fract;
-			*out = (blip_sample_t) s;
+			*out = (int16_t) s;
 			out += 2;
 			
 			// clamp sample
 			if ( (int16_t) s != s )
-				out [-2] = blip_sample_t (0x7FFF - (s >> 24));
+				out [-2] = int16_t (0x7FFF - (s >> 24));
 		}
 	}
 	
@@ -400,9 +400,9 @@ long Blip_Buffer::read_samples( blip_sample_t* out, long max_samples, bool stere
 	return count;
 }
 
-void Blip_Buffer::mix_samples( const blip_sample_t* in, long count )
+void Blip_Buffer::mix_samples( const int16_t* in, long count )
 {
-	buf_t_* buf = &buffer_ [(offset_ >> BLIP_BUFFER_ACCURACY) + (widest_impulse_ / 2 - 1)];
+	uint16_t* buf = &buffer_ [(offset_ >> BLIP_BUFFER_ACCURACY) + (widest_impulse_ / 2 - 1)];
 	
 	int prev = 0;
 	while ( count-- )

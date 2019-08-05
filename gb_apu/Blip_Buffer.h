@@ -12,16 +12,8 @@
 
 class Blip_Reader;
 
-// Source time unit.
-typedef long blip_time_t;
-
-// Type of sample produced. Signed 16-bit format.
-typedef int16_t blip_sample_t;
-
 // Make buffer as large as possible (currently about 65000 samples)
 const int blip_default_length = 0;
-
-typedef unsigned long blip_resampled_time_t; // not documented
 
 class Blip_Buffer {
 public:
@@ -55,7 +47,7 @@ public:
 	// (along with any still-unread samples) for reading with read_samples(). Begin
 	// a new time frame at the end of the current frame. All transitions must have
 	// been added before 'time'.
-	void end_frame( blip_time_t time );
+	void end_frame( long time );
 	
 	// Number of samples available for reading with read_samples()
 	long samples_avail() const;
@@ -64,7 +56,7 @@ public:
 	// the buffer. Return number of samples actually read and removed. If stereo is
 	// true, increment 'dest' one extra time after writing each sample, to allow
 	// easy interleving of two channels into a stereo output buffer.
-	long read_samples( blip_sample_t* dest, long max_samples, bool stereo = false );
+	long read_samples( int16_t* dest, long max_samples, bool stereo = false );
 	
 	// Remove 'count' samples from those waiting to be read
 	void remove_samples( long count );
@@ -75,31 +67,31 @@ public:
 // Beta features
 	
 	// Number of raw samples that can be mixed within frame of specified duration
-	long count_samples( blip_time_t duration ) const;
+	long count_samples( long duration ) const;
 	
 	// Mix 'count' samples from 'buf' into buffer.
-	void mix_samples( const blip_sample_t* buf, long count );
+	void mix_samples( const int16_t* buf, long count );
 	
 	// Count number of clocks needed until 'count' samples will be available.
 	// If buffer can't even hold 'count' samples, returns number of clocks until
 	// buffer is full.
-	blip_time_t count_clocks( long count ) const;
+	long count_clocks( long count ) const;
 	
 	
 	// not documented yet
 	
 	void remove_silence( long count );
 	
-	blip_resampled_time_t resampled_time( blip_time_t t ) const
+	unsigned long resampled_time( long t ) const
 	{
-		return t * blip_resampled_time_t (factor_) + offset_;
+		return t * unsigned long (factor_) + offset_;
 	}
 	
-	blip_resampled_time_t clock_rate_factor( long clock_rate ) const;
+	unsigned long clock_rate_factor( long clock_rate ) const;
 	
-	blip_resampled_time_t resampled_duration( int t ) const
+	unsigned long resampled_duration( int t ) const
 	{
-		return t * blip_resampled_time_t (factor_);
+		return t * unsigned long (factor_);
 	}
 	
 private:
@@ -111,11 +103,10 @@ private:
 	public:
 		enum { sample_offset_ = 0x7F7F }; // repeated byte allows memset to clear buffer
 		enum { widest_impulse_ = 24 };
-		typedef uint16_t buf_t_;
 		
 		unsigned long factor_;
-		blip_resampled_time_t offset_;
-		std::vector<buf_t_> buffer_;
+		unsigned long offset_;
+		std::vector<uint16_t> buffer_;
 		unsigned buffer_size_;
 	private:
 		long reader_accum;
@@ -144,7 +135,7 @@ private:
 
 // not documented yet (see Multi_Buffer.cpp for an example of use)
 class Blip_Reader {
-	std::vector<Blip_Buffer::buf_t_>::const_iterator buf;
+	std::vector<uint16_t>::const_iterator buf;
 	long accum;
 	#ifdef __MWERKS__
 	void operator = ( struct foobar ); // helps optimizer
@@ -182,27 +173,23 @@ public:
 
 const int blip_res_bits_ = 5;
 
-typedef uint32_t blip_pair_t_;
-
 class Blip_Impulse_ {
-	typedef uint16_t imp_t;
-	
 	blip_eq_t eq;
 	double  volume_unit_;
-	imp_t*  impulses;
-	imp_t*  impulse;
+	uint16_t*  impulses;
+	uint16_t*  impulse;
 	int     width;
 	int     fine_bits;
 	int     res;
 	bool    generate;
 	
 	void fine_volume_unit();
-	void scale_impulse( int unit, imp_t* ) const;
+	void scale_impulse( int unit, uint16_t* ) const;
 public:
 	Blip_Buffer*    buf;
 	uint32_t offset;
 	
-	void init( blip_pair_t_* impulses, int width, int res, int fine_bits = 0 );
+	void init( uint32_t* impulses, int width, int res, int fine_bits = 0 );
 	void volume_unit( double );
 	void treble_eq( const blip_eq_t& );
 };
@@ -227,7 +214,7 @@ inline long Blip_Buffer::sample_rate() const {
 	return samples_per_sec;
 }
 
-inline void Blip_Buffer::end_frame( blip_time_t t ) {
+inline void Blip_Buffer::end_frame( long t ) {
 	offset_ += t * factor_;
 	assert(( "Blip_Buffer::end_frame(): Frame went past end of buffer",
 			samples_avail() <= (long) buffer_size_ ));
@@ -236,7 +223,7 @@ inline void Blip_Buffer::end_frame( blip_time_t t ) {
 inline void Blip_Buffer::remove_silence( long count ) {
 	assert(( "Blip_Buffer::remove_silence(): Tried to remove more samples than available",
 			count <= samples_avail() ));
-	offset_ -= blip_resampled_time_t (count) << BLIP_BUFFER_ACCURACY;
+	offset_ -= unsigned long (count) << BLIP_BUFFER_ACCURACY;
 }
 
 inline int Blip_Buffer::output_latency() const {

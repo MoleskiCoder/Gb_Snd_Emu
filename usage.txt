@@ -8,14 +8,14 @@ Gb_Apu apu;
 
 int cpu_time;
 
-void write_memory( gb_addr_t addr, int data )
+void write_memory( unsigned addr, int data )
 {
 	// ...
 	if ( addr >= apu.start_addr && addr <= apu.end_addr )
 		apu.write_register( cpu_time, addr, data );
 }
 
-int read_memory( gb_addr_t addr )
+int read_memory( unsigned addr )
 {
 	// ...
 	if ( addr >= apu.start_addr && addr <= apu.end_addr )
@@ -34,7 +34,7 @@ void emulate_cpu( int end_time )
 
 Stereo_Buffer buf;
 const int out_size = 4096;
-blip_sample_t out_buf [out_size];
+int16_t out_buf [out_size];
 
 void end_frame( int length )
 {

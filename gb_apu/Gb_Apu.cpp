@@ -95,7 +95,7 @@ void Gb_Apu::osc_output( int index, Blip_Buffer* center, Blip_Buffer* left, Blip
 	osc.output = osc.outputs [osc.output_select];
 }
 
-void Gb_Apu::run_until( gb_time_t end_time )
+void Gb_Apu::run_until( long end_time )
 {
 	require( end_time >= last_time ); // end_time must not be before previous time
 	if ( end_time == last_time )
@@ -103,7 +103,7 @@ void Gb_Apu::run_until( gb_time_t end_time )
 	
 	while ( true )
 	{
-		gb_time_t time = next_frame_time;
+		long time = next_frame_time;
 		if ( time > end_time )
 			time = end_time;
 		
@@ -142,7 +142,7 @@ void Gb_Apu::run_until( gb_time_t end_time )
 	}
 }
 
-bool Gb_Apu::end_frame( gb_time_t end_time )
+bool Gb_Apu::end_frame( long end_time )
 {
 	if ( end_time > last_time )
 		run_until( end_time );
@@ -158,7 +158,7 @@ bool Gb_Apu::end_frame( gb_time_t end_time )
 	return result;
 }
 
-void Gb_Apu::write_register( gb_time_t time, gb_addr_t addr, int data )
+void Gb_Apu::write_register( long time, unsigned addr, int data )
 {
 	require( (unsigned) data < 0x100 );
 	
@@ -236,7 +236,7 @@ void Gb_Apu::write_register( gb_time_t time, gb_addr_t addr, int data )
 	}
 }
 
-int Gb_Apu::read_register( gb_time_t time, gb_addr_t addr )
+int Gb_Apu::read_register( long time, unsigned addr )
 {
 	// function now takes actual address, i.e. 0xFFXX
 	require( start_addr <= addr && addr <= end_addr );

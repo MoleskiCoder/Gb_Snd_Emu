@@ -14,7 +14,7 @@ more details. You should have received a copy of the GNU Lesser General
 Public License along with this module; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA */
 
-gb_time_t const frame_length = 70224;
+long const frame_length = 70224;
 
 Basic_Gb_Apu::Basic_Gb_Apu()
 {
@@ -36,12 +36,12 @@ blargg_err_t Basic_Gb_Apu::set_sample_rate( long rate )
 	return buf.set_sample_rate( rate );
 }
 
-void Basic_Gb_Apu::write_register( gb_addr_t addr, int data )
+void Basic_Gb_Apu::write_register( unsigned addr, int data )
 {
 	apu.write_register( clock(), addr, data );
 }
 
-int Basic_Gb_Apu::read_register( gb_addr_t addr )
+int Basic_Gb_Apu::read_register( unsigned addr )
 {
 	return apu.read_register( clock(), addr );
 }
@@ -58,7 +58,7 @@ long Basic_Gb_Apu::samples_avail() const
 	return buf.samples_avail();
 }
 
-long Basic_Gb_Apu::read_samples( sample_t* out, long count )
+long Basic_Gb_Apu::read_samples( int16_t* out, long count )
 {
 	return buf.read_samples( out, count );
 }

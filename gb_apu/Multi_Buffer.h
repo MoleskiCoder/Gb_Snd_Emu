@@ -38,7 +38,7 @@ public:
 	// See Blip_Buffer.h. For optimal operation, pass false for 'added_stereo'
 	// if nothing was added to the left and right buffers of any channel for
 	// this time frame.
-	virtual void end_frame( blip_time_t, bool added_stereo = true ) = 0;
+	virtual void end_frame( long, bool added_stereo = true ) = 0;
 	
 	// Number of samples per output frame (1 = mono, 2 = stereo)
 	int samples_per_frame() const;
@@ -48,7 +48,7 @@ public:
 	unsigned channels_changed_count() { return channels_changed_count_; }
 	
 	// See Blip_Buffer.h
-	virtual long read_samples( blip_sample_t*, long ) = 0;
+	virtual long read_samples( int16_t*, long ) = 0;
 	virtual long samples_avail() const = 0;
 	
 protected:
@@ -80,9 +80,9 @@ public:
 	void bass_freq( int );
 	void clear();
 	channel_t channel( int );
-	void end_frame( blip_time_t, bool unused = true );
+	void end_frame( long, bool unused = true );
 	long samples_avail() const;
-	long read_samples( blip_sample_t*, long );
+	long read_samples( int16_t*, long );
 };
 
 // Uses three buffers (one for center) and outputs stereo sample pairs.
@@ -102,10 +102,10 @@ public:
 	void bass_freq( int );
 	void clear();
 	channel_t channel( int index );
-	void end_frame( blip_time_t, bool added_stereo = true );
+	void end_frame( long, bool added_stereo = true );
 	
 	long samples_avail() const;
-	long read_samples( blip_sample_t*, long );
+	long read_samples( int16_t*, long );
 	
 private:
 	enum { buf_count = 3 };
@@ -114,8 +114,8 @@ private:
 	bool stereo_added;
 	bool was_stereo;
 	
-	void mix_stereo( blip_sample_t*, long );
-	void mix_mono( blip_sample_t*, long );
+	void mix_stereo( int16_t*, long );
+	void mix_mono( int16_t*, long );
 };
 
 // Silent_Buffer generates no samples, useful where no sound is wanted
@@ -129,9 +129,9 @@ public:
 	void bass_freq( int ) { }
 	void clear() { }
 	channel_t channel( int ) { return chan; }
-	void end_frame( blip_time_t, bool unused = true ) { }
+	void end_frame( long, bool unused = true ) { }
 	long samples_avail() const { return 0; }
-	long read_samples( blip_sample_t*, long ) { return 0; }
+	long read_samples( int16_t*, long ) { return 0; }
 };
 
 
@@ -165,6 +165,6 @@ inline void Mono_Buffer::clear() { buf.clear(); }
 
 inline void Mono_Buffer::bass_freq( int freq ) { buf.bass_freq( freq ); }
 
-inline long Mono_Buffer::read_samples( blip_sample_t* p, long s ) { return buf.read_samples( p, s ); }
+inline long Mono_Buffer::read_samples( int16_t* p, long s ) { return buf.read_samples( p, s ); }
 
 inline long Mono_Buffer::samples_avail() const { return buf.samples_avail(); }

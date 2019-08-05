@@ -62,7 +62,7 @@ Mono_Buffer::channel_t Mono_Buffer::channel( int index )
 	return ch;
 }
 
-void Mono_Buffer::end_frame( blip_time_t t, bool )
+void Mono_Buffer::end_frame( long t, bool )
 {
 	buf.end_frame( t );
 }
@@ -107,7 +107,7 @@ void Stereo_Buffer::clear()
 		bufs [i].clear();
 }
 
-void Stereo_Buffer::end_frame( blip_time_t clock_count, bool stereo )
+void Stereo_Buffer::end_frame( long clock_count, bool stereo )
 {
 	for ( unsigned i = 0; i < buf_count; i++ )
 		bufs [i].end_frame( clock_count );
@@ -115,7 +115,7 @@ void Stereo_Buffer::end_frame( blip_time_t clock_count, bool stereo )
 	stereo_added |= stereo;
 }
 
-long Stereo_Buffer::read_samples( blip_sample_t* out, long count )
+long Stereo_Buffer::read_samples( int16_t* out, long count )
 {
 	require( !(count & 1) ); // count must be even
 	count = (unsigned) count / 2;
@@ -155,7 +155,7 @@ long Stereo_Buffer::read_samples( blip_sample_t* out, long count )
 
 #include BLARGG_ENABLE_OPTIMIZER
 
-void Stereo_Buffer::mix_stereo( blip_sample_t* out, long count )
+void Stereo_Buffer::mix_stereo( int16_t* out, long count )
 {
 	Blip_Reader left; 
 	Blip_Reader right; 
@@ -190,7 +190,7 @@ void Stereo_Buffer::mix_stereo( blip_sample_t* out, long count )
 	left.end( bufs [1] );
 }
 
-void Stereo_Buffer::mix_mono( blip_sample_t* out, long count )
+void Stereo_Buffer::mix_mono( int16_t* out, long count )
 {
 	Blip_Reader in;
 	int bass = in.begin( bufs [0] );

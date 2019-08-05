@@ -23,11 +23,10 @@ public:
 	int sample_count() const;
 	
 	// Write samples to buffer and block until enough space is available
-	typedef short sample_t;
-	void write( const sample_t*, int count );
+	void write( const int16_t*, int count );
 	
 	// Pointer to samples currently playing (for showing waveform display)
-	sample_t const* currently_playing() const { return currently_playing_; }
+	int16_t const* currently_playing() const { return currently_playing_; }
 	
 	// Stop audio output
 	void stop();
@@ -35,15 +34,15 @@ public:
 private:
 	enum { buf_size = 4096 };
 	enum { buf_count = 3 };
-	std::vector<sample_t> bufs;
+	std::vector<int16_t> bufs;
 	SDL_sem* volatile free_sem;
-	sample_t* volatile currently_playing_;
+	int16_t* volatile currently_playing_;
 	int volatile read_buf;
 	int write_buf;
 	int write_pos;
 	bool sound_open;
 	
-	sample_t* buf( int index );
+	int16_t* buf( int index );
 	void fill_buffer( Uint8*, int );
 	static void fill_buffer_( void*, Uint8*, int );
 };

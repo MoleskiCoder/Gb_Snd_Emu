@@ -41,7 +41,7 @@ class Blip_Synth {
 			abs_range <= 256 ? 4 : abs_range <= 512 ? 5 : abs_range <= 1024 ? 6 :
 			abs_range <= 2048 ? 7 : 8) : 0)
 	};
-	blip_pair_t_  impulses [impulse_size * res * 2 + base_impulses_size];
+	uint32_t  impulses [impulse_size * res * 2 + base_impulses_size];
 	Blip_Impulse_ impulse;
 	void init() { impulse.init( impulses, width, res, fine_bits ); }
 public:
@@ -67,19 +67,19 @@ public:
 	// into the specified buffer (default buffer if none specified) at the
 	// specified source time. Delta can be positive or negative. To increase
 	// performance by inlining code at the call site, use offset_inline().
-	void offset( blip_time_t, int delta, Blip_Buffer* ) const;
+	void offset( long, int delta, Blip_Buffer* ) const;
 	
-	void offset_resampled( blip_resampled_time_t, int delta, Blip_Buffer* ) const;
-	void offset_resampled( blip_resampled_time_t t, int o ) const {
+	void offset_resampled( unsigned long, int delta, Blip_Buffer* ) const;
+	void offset_resampled( unsigned long t, int o ) const {
 		offset_resampled( t, o, impulse.buf );
 	}
-	void offset( blip_time_t t, int delta ) const {
+	void offset( long t, int delta ) const {
 		offset( t, delta, impulse.buf );
 	}
-	void offset_inline( blip_time_t time, int delta, Blip_Buffer* buf ) const {
+	void offset_inline( long time, int delta, Blip_Buffer* buf ) const {
 		offset_resampled( time * buf->factor_ + buf->offset_, delta, buf );
 	}
-	void offset_inline( blip_time_t time, int delta ) const {
+	void offset_inline( long time, int delta ) const {
 		offset_inline( time, delta, impulse.buf );
 	}
 };
@@ -90,7 +90,7 @@ public:
 template<int quality,int range>
 class Blip_Wave {
 	Blip_Synth<quality,range> synth;
-	blip_time_t time_;
+	long time_;
 	int last_amp;
 	void init() { time_ = 0; last_amp = 0; }
 public:
@@ -106,19 +106,19 @@ public:
 	void output( Blip_Buffer* b )       { synth.output( b ); if ( !b ) time_ = last_amp = 0; }
 	
 	// Current time in frame
-	blip_time_t time() const            { return time_; }
-	void time( blip_time_t t )          { time_ = t; }
+	long time() const            { return time_; }
+	void time( long t )          { time_ = t; }
 	
 	// Current amplitude of wave
 	int amplitude() const               { return last_amp; }
 	void amplitude( int );
 	
 	// Move forward by 't' time units
-	void delay( blip_time_t t )         { time_ += t; }
+	void delay( long t )         { time_ += t; }
 	
 	// End time frame of specified duration. Localize time to new frame.
 	// If wave hadn't been run to end of frame, start it at beginning of new frame.
-	void end_frame( blip_time_t duration )
+	void end_frame( long duration )
 	{
 		time_ -= duration;
 		if ( time_ < 0 )
@@ -136,30 +136,28 @@ void Blip_Wave<quality,range>::amplitude( int amp ) {
 }
 
 template<int quality,int range>
-inline void Blip_Synth<quality,range>::offset_resampled( blip_resampled_time_t time,
+inline void Blip_Synth<quality,range>::offset_resampled( unsigned long time,
 		int delta, Blip_Buffer* blip_buf ) const
 {
-	typedef blip_pair_t_ pair_t;
-	
 	unsigned sample_index = (time >> BLIP_BUFFER_ACCURACY) & ~1;
 	assert(( "Blip_Synth/Blip_wave: Went past end of buffer",
 			sample_index < blip_buf->buffer_size_ ));
 	enum { const_offset = Blip_Buffer::widest_impulse_ / 2 - width / 2 };
-	pair_t* buf = (pair_t*) &blip_buf->buffer_ [const_offset + sample_index];
+	uint32_t* buf = (uint32_t*) &blip_buf->buffer_ [const_offset + sample_index];
 	
 	enum { shift = BLIP_BUFFER_ACCURACY - blip_res_bits_ };
 	enum { mask = res * 2 - 1 };
-	const pair_t* imp = &impulses [((time >> shift) & mask) * impulse_size];
+	const uint32_t* imp = &impulses [((time >> shift) & mask) * impulse_size];
 	
-	pair_t offset = impulse.offset * delta;
+	uint32_t offset = impulse.offset * delta;
 	
 	if ( !fine_bits )
 	{
 		// normal mode
 		for ( int n = width / 4; n; --n )
 		{
-			pair_t t0 = buf [0] - offset;
-			pair_t t1 = buf [1] - offset;
+			uint32_t t0 = buf [0] - offset;
+			uint32_t t1 = buf [1] - offset;
 			
 			t0 += imp [0] * delta;
 			t1 += imp [1] * delta;
@@ -180,8 +178,8 @@ inline void Blip_Synth<quality,range>::offset_resampled( blip_resampled_time_t t
 		
 		for ( int n = width / 4; n; --n )
 		{
-			pair_t t0 = buf [0] - offset;
-			pair_t t1 = buf [1] - offset;
+			uint32_t t0 = buf [0] - offset;
+			uint32_t t1 = buf [1] - offset;
 			
 			t0 += imp [0] * delta2;
 			t0 += imp [1] * delta;
@@ -199,6 +197,6 @@ inline void Blip_Synth<quality,range>::offset_resampled( blip_resampled_time_t t
 }
 
 template<int quality,int range>
-void Blip_Synth<quality,range>::offset( blip_time_t time, int delta, Blip_Buffer* buf ) const {
+void Blip_Synth<quality,range>::offset( long time, int delta, Blip_Buffer* buf ) const {
 	offset_resampled( time * buf->factor_ + buf->offset_, delta, buf );
 }

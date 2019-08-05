@@ -17,8 +17,8 @@ public:
 	blargg_err_t set_sample_rate( long rate );
 	
 	// Pass reads and writes in the range 0xff10-0xff3f
-	void write_register( gb_addr_t, int data );
-	int read_register( gb_addr_t );
+	void write_register( unsigned, int data );
+	int read_register( unsigned );
 	
 	// End a 1/60 sound frame and add samples to buffer
 	void end_frame();
@@ -30,14 +30,13 @@ public:
 	long samples_avail() const;
 	
 	// Read at most 'count' samples out of buffer and return number actually read
-	typedef blip_sample_t sample_t;
-	long read_samples( sample_t* out, long count );
+	long read_samples( int16_t* out, long count );
 	
 private:
 	Gb_Apu apu;
 	Stereo_Buffer buf;
-	blip_time_t time;
+	long time;
 	
 	// faked CPU timing
-	blip_time_t clock() { return time += 4; }
+	long clock() { return time += 4; }
 };

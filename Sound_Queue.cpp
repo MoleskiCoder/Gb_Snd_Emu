@@ -97,13 +97,13 @@ int Sound_Queue::sample_count() const
 	return buf_size * buf_count - buf_free;
 }
 
-inline Sound_Queue::sample_t* Sound_Queue::buf( int index )
+inline int16_t* Sound_Queue::buf( int index )
 {
 	assert( (unsigned) index < buf_count );
 	return &bufs[ + (long) index * buf_size];
 }
 
-void Sound_Queue::write( const sample_t* in, int count )
+void Sound_Queue::write( const int16_t* in, int count )
 {
 	while ( count )
 	{

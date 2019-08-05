@@ -5,9 +5,6 @@
 
 #pragma once
 
-typedef long     gb_time_t; // clock cycle count
-typedef unsigned gb_addr_t; // 16-bit address
-
 #include "Gb_Oscs.h"
 
 class Gb_Apu {
@@ -42,16 +39,16 @@ public:
 	enum { register_count = end_addr - start_addr + 1 };
 	
 	// Write 'data' to address at specified time
-	void write_register( gb_time_t, gb_addr_t, int data );
+	void write_register( long, unsigned, int data );
 	
 	// Read from address at specified time
-	int read_register( gb_time_t, gb_addr_t );
+	int read_register( long, unsigned );
 	
 	// Run all oscillators up to specified time, end current time frame, then
 	// start a new frame at time 0. Return true if any oscillators added
 	// sound to one of the left/right buffers, false if they only added
 	// to the center buffer.
-	bool end_frame( gb_time_t );
+	bool end_frame( long );
 	
 private:
 	// noncopyable
@@ -59,8 +56,8 @@ private:
 	Gb_Apu& operator = ( const Gb_Apu& );
 	
 	Gb_Osc*     oscs [osc_count];
-	gb_time_t   next_frame_time;
-	gb_time_t   last_time;
+	long   next_frame_time;
+	long   last_time;
 	int         frame_count;
 	bool        stereo_found;
 	
@@ -72,7 +69,7 @@ private:
 	Gb_Square::Synth square_synth; // shared between squares
 	Gb_Wave::Synth   other_synth;  // shared between wave and noise
 	
-	void run_until( gb_time_t );
+	void run_until( long );
 };
 
 inline void Gb_Apu::output( Blip_Buffer* b ) { output( b, NULL, NULL ); }

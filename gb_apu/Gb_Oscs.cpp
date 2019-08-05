@@ -196,7 +196,7 @@ void Gb_Square::write_register( int reg, int value )
 	Gb_Env::write_register( reg, value );
 }
 
-void Gb_Square::run( gb_time_t time, gb_time_t end_time )
+void Gb_Square::run( long time, long end_time )
 {
 	// to do: when frequency goes above 20000 Hz output should actually be 1/2 volume
 	// rather than 0
@@ -300,7 +300,7 @@ void Gb_Wave::write_register( int reg, int value )
 	Gb_Osc::write_register( reg, value );
 }
 
-void Gb_Wave::run( gb_time_t time, gb_time_t end_time )
+void Gb_Wave::run( long time, long end_time )
 {
 	// to do: when frequency goes above 20000 Hz output should actually be 1/2 volume
 	// rather than 0
@@ -396,7 +396,7 @@ void Gb_Noise::write_register( int reg, int value )
 
 #include BLARGG_ENABLE_OPTIMIZER
 
-void Gb_Noise::run( gb_time_t time, gb_time_t end_time )
+void Gb_Noise::run( long time, long end_time )
 {
 	if ( !enabled || (!length && length_enabled) || !volume ) {
 		if ( last_amp ) {
@@ -419,9 +419,9 @@ void Gb_Noise::run( gb_time_t time, gb_time_t end_time )
 		{
 			Blip_Buffer* const output = this->output;
 			// keep parallel resampled time to eliminate multiplication in the loop
-			const blip_resampled_time_t resampled_period =
+			const unsigned long resampled_period =
 					output->resampled_duration( period );
-			blip_resampled_time_t resampled_time = output->resampled_time( time );
+			unsigned long resampled_time = output->resampled_time( time );
 			const unsigned mask = ~(1u << tap);
 			unsigned bits = this->bits;
 			amp *= 2;

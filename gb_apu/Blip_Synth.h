@@ -34,7 +34,7 @@ class Blip_Synth {
 		abs_range = (range < 0) ? -range : range,
 		fine_mode = (range > 512 || range < 0),
 		width = (quality < 5 ? quality * 4 : Blip_Buffer::widest_impulse_),
-		res = 1 << blip_res_bits_,
+		res = 1 << Blip_Buffer::blip_res_bits_,
 		impulse_size = width / 2 * (fine_mode + 1),
 		base_impulses_size = width / 2 * (res / 2 + 1),
 		fine_bits = (fine_mode ? (abs_range <= 64 ? 2 : abs_range <= 128 ? 3 :
@@ -139,13 +139,13 @@ template<int quality,int range>
 inline void Blip_Synth<quality,range>::offset_resampled( unsigned long time,
 		int delta, Blip_Buffer* blip_buf ) const
 {
-	unsigned sample_index = (time >> BLIP_BUFFER_ACCURACY) & ~1;
+	unsigned sample_index = (time >> Blip_Buffer::BLIP_BUFFER_ACCURACY) & ~1;
 	assert(( "Blip_Synth/Blip_wave: Went past end of buffer",
 			sample_index < blip_buf->buffer_size_ ));
 	enum { const_offset = Blip_Buffer::widest_impulse_ / 2 - width / 2 };
 	uint32_t* buf = (uint32_t*) &blip_buf->buffer_ [const_offset + sample_index];
 	
-	enum { shift = BLIP_BUFFER_ACCURACY - blip_res_bits_ };
+	enum { shift = Blip_Buffer::BLIP_BUFFER_ACCURACY - Blip_Buffer::blip_res_bits_ };
 	enum { mask = res * 2 - 1 };
 	const uint32_t* imp = &impulses [((time >> shift) & mask) * impulse_size];
 	

@@ -26,7 +26,7 @@ public:
 	virtual channel_t channel( int index ) = 0;
 	
 	// See Blip_Buffer.h
-	virtual blargg_err_t set_sample_rate( long rate, int msec = blip_default_length ) = 0;
+	virtual blargg_err_t set_sample_rate( long rate, int msec = Blip_Buffer::blip_default_length ) = 0;
 	virtual void clock_rate( long ) = 0;
 	virtual void bass_freq( int ) = 0;
 	virtual void clear() = 0;
@@ -75,7 +75,7 @@ public:
 	Blip_Buffer* center() { return &buf; }
 	
 	// See Multi_Buffer
-	blargg_err_t set_sample_rate( long rate, int msec = blip_default_length );
+	blargg_err_t set_sample_rate( long rate, int msec = Blip_Buffer::blip_default_length );
 	void clock_rate( long );
 	void bass_freq( int );
 	void clear();
@@ -97,7 +97,7 @@ public:
 	Blip_Buffer* right()        { return &bufs [2]; }
 	
 	// See Multi_Buffer
-	blargg_err_t set_sample_rate( long, int msec = blip_default_length );
+	blargg_err_t set_sample_rate( long, int msec = Blip_Buffer::blip_default_length );
 	void clock_rate( long );
 	void bass_freq( int );
 	void clear();
@@ -124,7 +124,7 @@ class Silent_Buffer : public Multi_Buffer {
 public:
 	Silent_Buffer();
 	
-	blargg_err_t set_sample_rate( long rate, int msec = blip_default_length );
+	blargg_err_t set_sample_rate( long rate, int msec = Blip_Buffer::blip_default_length );
 	void clock_rate( long ) { }
 	void bass_freq( int ) { }
 	void clear() { }

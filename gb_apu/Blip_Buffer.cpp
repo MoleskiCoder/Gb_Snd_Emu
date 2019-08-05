@@ -177,7 +177,7 @@ void Blip_Impulse_::scale_impulse( int unit, uint16_t* imp_in ) const
 	}*/
 }
 
-const int max_res = 1 << blip_res_bits_;
+const int max_res = 1 << Blip_Buffer::blip_res_bits_;
 
 void Blip_Impulse_::fine_volume_unit()
 {

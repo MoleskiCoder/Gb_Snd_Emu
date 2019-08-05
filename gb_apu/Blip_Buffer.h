@@ -12,11 +12,13 @@
 
 class Blip_Reader;
 
-// Make buffer as large as possible (currently about 65000 samples)
-const int blip_default_length = 0;
-
 class Blip_Buffer {
 public:
+	// Make buffer as large as possible (currently about 65000 samples)
+	enum { blip_default_length = 0 };
+	enum { BLIP_BUFFER_ACCURACY = 16 };
+	enum { blip_res_bits_ = 5 };
+
 	// Construct an empty buffer.
 	Blip_Buffer();
 	
@@ -27,14 +29,24 @@ public:
 	blargg_err_t set_sample_rate( long samples_per_sec, int msec_length = blip_default_length );
 	
 	// Length of buffer, in milliseconds
-	int length() const;
+	int length() const {
+		return length_;
+	}
 	
 	// Current output sample rate
-	long sample_rate() const;
+	long sample_rate() const {
+		return samples_per_sec;
+	}
 	
 	// Number of source time units per second
-	void clock_rate( long );
-	long clock_rate() const;
+	void clock_rate(long cps) {
+		clocks_per_sec = cps;
+		factor_ = clock_rate_factor(cps);
+	}
+
+	long clock_rate() const {
+		return clocks_per_sec;
+	}
 	
 	// Set frequency at which high-pass filter attenuation passes -3dB
 	void bass_freq( int frequency );
@@ -47,10 +59,16 @@ public:
 	// (along with any still-unread samples) for reading with read_samples(). Begin
 	// a new time frame at the end of the current frame. All transitions must have
 	// been added before 'time'.
-	void end_frame( long time );
+	void end_frame( long t ) {
+		offset_ += t * factor_;
+		assert(("Blip_Buffer::end_frame(): Frame went past end of buffer",
+			samples_avail() <= (long)buffer_size_));
+	}
 	
 	// Number of samples available for reading with read_samples()
-	long samples_avail() const;
+	long samples_avail() const {
+		return long(offset_ >> BLIP_BUFFER_ACCURACY);
+	}
 	
 	// Read at most 'max_samples' out of buffer into 'dest', removing them from from
 	// the buffer. Return number of samples actually read and removed. If stereo is
@@ -62,7 +80,9 @@ public:
 	void remove_samples( long count );
 	
 	// Number of samples delay from synthesis to samples read out
-	int output_latency() const;
+	int output_latency() const {
+		return widest_impulse_ / 2;
+	}
 	
 // Beta features
 	
@@ -80,7 +100,11 @@ public:
 	
 	// not documented yet
 	
-	void remove_silence( long count );
+	void remove_silence( long count ) {
+		assert(("Blip_Buffer::remove_silence(): Tried to remove more samples than available",
+			count <= samples_avail()));
+		offset_ -= unsigned long(count) << BLIP_BUFFER_ACCURACY;
+	}
 	
 	unsigned long resampled_time( long t ) const
 	{
@@ -124,8 +148,10 @@ private:
 // Low-pass equalization parameters (see notes.txt)
 class blip_eq_t {
 public:
-	blip_eq_t( double treble = 0 );
-	blip_eq_t( double treble, long cutoff, long sample_rate );
+	blip_eq_t(double t = 0)
+		: treble(t), cutoff(0), sample_rate(44100) {}
+	blip_eq_t(double t, long c, long sr)
+		: treble(t), cutoff(c), sample_rate(sr) {}
 private:
 	double treble;
 	long cutoff;
@@ -137,9 +163,6 @@ private:
 class Blip_Reader {
 	std::vector<uint16_t>::const_iterator buf;
 	long accum;
-	#ifdef __MWERKS__
-	void operator = ( struct foobar ); // helps optimizer
-	#endif
 public:
 	// avoid anything which might cause optimizer to put object in memory
 	
@@ -167,12 +190,6 @@ public:
 
 // End of public interface
 	
-#ifndef BLIP_BUFFER_ACCURACY
-	#define BLIP_BUFFER_ACCURACY 16
-#endif
-
-const int blip_res_bits_ = 5;
-
 class Blip_Impulse_ {
 	blip_eq_t eq;
 	double  volume_unit_;
@@ -193,51 +210,5 @@ public:
 	void volume_unit( double );
 	void treble_eq( const blip_eq_t& );
 };
-
-inline blip_eq_t::blip_eq_t( double t ) :
-		treble( t ), cutoff( 0 ), sample_rate( 44100 ) {
-}
-
-inline blip_eq_t::blip_eq_t( double t, long c, long sr ) :
-		treble( t ), cutoff( c ), sample_rate( sr ) {
-}
-
-inline int Blip_Buffer::length() const {
-	return length_;
-}
-
-inline long Blip_Buffer::samples_avail() const {
-	return long (offset_ >> BLIP_BUFFER_ACCURACY);
-}
-
-inline long Blip_Buffer::sample_rate() const {
-	return samples_per_sec;
-}
-
-inline void Blip_Buffer::end_frame( long t ) {
-	offset_ += t * factor_;
-	assert(( "Blip_Buffer::end_frame(): Frame went past end of buffer",
-			samples_avail() <= (long) buffer_size_ ));
-}
-
-inline void Blip_Buffer::remove_silence( long count ) {
-	assert(( "Blip_Buffer::remove_silence(): Tried to remove more samples than available",
-			count <= samples_avail() ));
-	offset_ -= unsigned long (count) << BLIP_BUFFER_ACCURACY;
-}
-
-inline int Blip_Buffer::output_latency() const {
-	return widest_impulse_ / 2;
-}
-
-inline long Blip_Buffer::clock_rate() const {
-	return clocks_per_sec;
-}
-
-inline void Blip_Buffer::clock_rate( long cps )
-{
-	clocks_per_sec = cps;
-	factor_ = clock_rate_factor( cps );
-}
 
 #include "Blip_Synth.h"

@@ -65,11 +65,6 @@ any of the modules. The library is exception-safe, and any exceptions which
 occur are not intercepted. Any exceptions thrown by the standard library or
 caller-supplied functions are not caught.
 
-The library uses BLARGG_NEW instead of new for allocations. By default,
-BLARGG_NEW is #defined to plain new, so if your compiler has exceptions
-enabled, failed allocations will result in an exception rather than an error
-string. This can be overriden in your config.h file (see below).
-
 Significant violations of the documented interface are flagged with debug-only
 assertions. Failure of these usually indicates a caller error rather than a
 defect in the library.
@@ -91,13 +86,6 @@ I have attempted to design the library so that configuration can be done
 easy to upgrade to a new version without losing any customizations to its
 configuration.
 
-Some parts of the library might depend on the order of bytes in multibyte
-types. If so, they will cause a compilation error if the order can't be
-determined (rather than silently fail). If this occurs, define the appropriate
-symbol. For big-endian (most significant byte first, i.e. Motorola 68000,
-PowerPC), #define BLARGG_BIG_ENDIAN to 1. For little-endian (least significant
-byte first, i.e. Intel x86), #define BLARGG_LITTLE_ENDIAN to 1.
-
 Older C++ compilers might not support bool. Support is provided where bool is
 not available, but the compiler's support of bool might not be properly
 determined. If errors occur in "blargg_common.h" in the bool section, #define
@@ -118,10 +106,6 @@ library sources only. By default, this is #defined to "blargg_source.h".
 In library source files, #include BLARGG_ENABLE_OPTIMIZER is used before
 performance-critical code. By default it doesn't do anything, since enabling
 compiler options involves compiler-specific #pragma directives.
-
-After you've got the library working, you can enable platform-specific
-optimizations by #defining BLARGG_NONPORTABLE to 1. Contact me if you encounter
-any problems that only occur when these are enabled.
 
 If you have any problems with "blargg_common.h", contact me.
 

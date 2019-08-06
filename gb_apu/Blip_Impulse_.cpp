@@ -4,6 +4,7 @@
 #include "Blip_Buffer.h"
 
 #include <algorithm>
+#include <cmath>
 
 void Blip_Impulse_::init(uint32_t* imps, int w, int r, int fb)
 {

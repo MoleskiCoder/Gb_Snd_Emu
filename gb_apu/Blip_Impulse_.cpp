@@ -19,10 +19,6 @@ void Blip_Impulse_::init(uint32_t* imps, int w, int r, int fb)
 	offset = 0;
 }
 
-const int impulse_bits = 15;
-const long impulse_amp = 1L << impulse_bits;
-const long impulse_offset = impulse_amp / 2;
-
 void Blip_Impulse_::scale_impulse(int unit, uint16_t* imp_in) const
 {
 	long offset = ((long)unit << impulse_bits) - impulse_offset * unit +
@@ -65,13 +61,11 @@ void Blip_Impulse_::scale_impulse(int unit, uint16_t* imp_in) const
 	}*/
 }
 
-const int max_res = 1 << Blip_Buffer::blip_res_bits_;
-
 void Blip_Impulse_::fine_volume_unit()
 {
 	// to do: find way of merging in-place without temporary buffer
 
-	uint16_t temp[max_res * 2 * Blip_Buffer::widest_impulse_];
+	uint16_t temp[Blip_Buffer::max_res * 2 * Blip_Buffer::widest_impulse_];
 	scale_impulse((offset & 0xffff) << fine_bits, temp);
 	uint16_t* imp2 = impulses + res * 2 * width;
 	scale_impulse(offset & 0xffff, imp2);
@@ -105,8 +99,6 @@ void Blip_Impulse_::volume_unit(double new_unit)
 	else
 		scale_impulse(offset & 0xffff, impulses);
 }
-
-static const double pi = 3.1415926535897932384626433832795029L;
 
 void Blip_Impulse_::treble_eq(const blip_eq_t& new_eq)
 {
@@ -143,10 +135,10 @@ void Blip_Impulse_::treble_eq(const blip_eq_t& new_eq)
 	const double pow_a_nc = rescale * pow(rolloff, n_harm * cutoff);
 
 	double total = 0.0;
-	const double to_angle = pi / 2 / n_harm / max_res;
+	const double to_angle = pi / 2 / n_harm / Blip_Buffer::max_res;
 
-	float buf[max_res * (Blip_Buffer::widest_impulse_ - 2) / 2];
-	const int size = max_res * (width - 2) / 2;
+	float buf[Blip_Buffer::max_res * (Blip_Buffer::widest_impulse_ - 2) / 2];
+	const int size = Blip_Buffer::max_res * (width - 2) / 2;
 	for (int i = size; i--; )
 	{
 		double angle = (i * 2 + 1) * to_angle;
@@ -186,16 +178,16 @@ void Blip_Impulse_::treble_eq(const blip_eq_t& new_eq)
 	// integrate runs of length 'max_res'
 	double factor = impulse_amp * 0.5 / total; // 0.5 accounts for other mirrored half
 	uint16_t* imp = impulse;
-	const int step = max_res / res;
-	int offset = res > 1 ? max_res : max_res / 2;
+	const int step = Blip_Buffer::max_res / res;
+	int offset = res > 1 ? Blip_Buffer::max_res : Blip_Buffer::max_res / 2;
 	for (int n = res / 2 + 1; n--; offset -= step)
 	{
 		for (int w = -width / 2; w < width / 2; w++)
 		{
 			double sum = 0;
-			for (int i = max_res; i--; )
+			for (int i = Blip_Buffer::max_res; i--; )
 			{
-				int index = w * max_res + offset + i;
+				int index = w * Blip_Buffer::max_res + offset + i;
 				if (index < 0)
 					index = -index - 1;
 				if (index < size)

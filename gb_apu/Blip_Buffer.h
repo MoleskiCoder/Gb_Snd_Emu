@@ -18,6 +18,8 @@ public:
 	enum { BLIP_BUFFER_ACCURACY = 16 };
 	enum { blip_res_bits_ = 5 };
 
+	static constexpr int max_res = 1 << Blip_Buffer::blip_res_bits_;
+
 	// Construct an empty buffer.
 	Blip_Buffer();
 	

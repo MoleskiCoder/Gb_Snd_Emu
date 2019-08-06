@@ -7,6 +7,13 @@
 class Blip_Buffer;
 
 class Blip_Impulse_ {
+
+	static constexpr int impulse_bits = 15;
+	static constexpr long impulse_amp = 1L << impulse_bits;
+	static constexpr long impulse_offset = impulse_amp / 2;
+
+	static constexpr double pi = 3.1415926535897932384626433832795029L;
+
 	blip_eq_t eq;
 	double  volume_unit_;
 	uint16_t*  impulses;

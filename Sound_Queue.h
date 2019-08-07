@@ -25,9 +25,6 @@ public:
 	// Write samples to buffer and block until enough space is available
 	void write( const int16_t*, int count );
 	
-	// Pointer to samples currently playing (for showing waveform display)
-	int16_t const* currently_playing() const { return currently_playing_; }
-	
 	// Stop audio output
 	void stop();
 	

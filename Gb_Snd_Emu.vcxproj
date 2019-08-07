@@ -27,26 +27,26 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -142,9 +142,7 @@
     <ClInclude Include="gb_apu\Blip_Wave.h" />
     <ClInclude Include="gb_apu\Gb_Apu.h" />
     <ClInclude Include="gb_apu\Gb_Oscs.h" />
-    <ClInclude Include="gb_apu\Mono_Buffer.h" />
     <ClInclude Include="gb_apu\Multi_Buffer.h" />
-    <ClInclude Include="gb_apu\Silent_Buffer.h" />
     <ClInclude Include="gb_apu\Stereo_Buffer.h" />
     <ClInclude Include="Sound_Queue.h" />
   </ItemGroup>
@@ -154,9 +152,7 @@
     <ClCompile Include="gb_apu\Blip_Impulse_.cpp" />
     <ClCompile Include="gb_apu\Gb_Apu.cpp" />
     <ClCompile Include="gb_apu\Gb_Oscs.cpp" />
-    <ClCompile Include="gb_apu\Mono_Buffer.cpp" />
     <ClCompile Include="gb_apu\Multi_Buffer.cpp" />
-    <ClCompile Include="gb_apu\Silent_Buffer.cpp" />
     <ClCompile Include="gb_apu\Stereo_Buffer.cpp" />
     <ClCompile Include="Sound_Queue.cpp" />
   </ItemGroup>

@@ -37,10 +37,10 @@ public:
 	enum { register_count = end_addr - start_addr + 1 };
 	
 	// Write 'data' to address at specified time
-	void write_register( long, unsigned, int data );
+	void write_register( long, uint16_t, uint8_t data );
 	
 	// Read from address at specified time
-	int read_register( long, unsigned );
+	uint8_t read_register( long, uint16_t);
 	
 	// Run all oscillators up to specified time, end current time frame, then
 	// start a new frame at time 0. Return true if any oscillators added

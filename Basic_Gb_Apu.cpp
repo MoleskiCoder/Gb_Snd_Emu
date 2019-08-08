@@ -25,10 +25,6 @@ Basic_Gb_Apu::Basic_Gb_Apu()
 	buf.bass_freq( 461 ); // higher values simulate smaller speaker
 }
 
-Basic_Gb_Apu::~Basic_Gb_Apu()
-{
-}
-
 void Basic_Gb_Apu::set_sample_rate( long rate )
 {
 	apu.output( buf.center(), buf.left(), buf.right() );
@@ -36,12 +32,12 @@ void Basic_Gb_Apu::set_sample_rate( long rate )
 	buf.set_sample_rate( rate );
 }
 
-void Basic_Gb_Apu::write_register( unsigned addr, int data )
+void Basic_Gb_Apu::write_register(uint16_t addr, uint8_t data )
 {
 	apu.write_register( clock(), addr, data );
 }
 
-int Basic_Gb_Apu::read_register( unsigned addr )
+uint8_t Basic_Gb_Apu::read_register(uint16_t addr )
 {
 	return apu.read_register( clock(), addr );
 }
@@ -49,7 +45,7 @@ int Basic_Gb_Apu::read_register( unsigned addr )
 void Basic_Gb_Apu::end_frame()
 {
 	time = 0;
-	bool stereo = apu.end_frame( frame_length );
+	const auto stereo = apu.end_frame( frame_length );
 	buf.end_frame( frame_length, stereo );
 }
 

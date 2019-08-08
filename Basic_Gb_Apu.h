@@ -10,17 +10,16 @@
 
 #include <vector>
 
-class Basic_Gb_Apu {
+class Basic_Gb_Apu final {
 public:
 	Basic_Gb_Apu();
-	~Basic_Gb_Apu();
 	
 	// Set output sample rate
 	void set_sample_rate( long rate );
 	
 	// Pass reads and writes in the range 0xff10-0xff3f
-	void write_register( unsigned, int data );
-	int read_register( unsigned );
+	void write_register( uint16_t, uint8_t data );
+	uint8_t read_register(uint16_t);
 	
 	// End a 1/60 sound frame and add samples to buffer
 	void end_frame();
@@ -40,5 +39,5 @@ private:
 	long time;
 	
 	// faked CPU timing
-	long clock() { return time += 4; }
+	long clock() noexcept { return time += 4; }
 };

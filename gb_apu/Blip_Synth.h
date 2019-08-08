@@ -94,7 +94,7 @@ inline void Blip_Synth<quality,range>::offset_resampled( unsigned long time,
 	
 	uint32_t offset = impulse.offset * delta;
 	
-	if ( !fine_bits )
+	if constexpr ( !fine_bits )
 	{
 		// normal mode
 		for ( int n = width / 4; n; --n )

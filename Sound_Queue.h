@@ -12,7 +12,6 @@
 // Simple SDL sound wrapper that has a synchronous interface
 class Sound_Queue {
 public:
-	Sound_Queue();
 	~Sound_Queue();
 	
 	// Initialize with specified sample rate and channel count.
@@ -32,12 +31,12 @@ private:
 	enum { buf_size = 4096 };
 	enum { buf_count = 3 };
 	std::vector<int16_t> bufs;
-	SDL_sem* volatile free_sem;
-	int16_t* volatile currently_playing_;
+	SDL_sem* volatile free_sem = nullptr;
+	int16_t* volatile currently_playing_ = nullptr;
 	int volatile read_buf;
 	int write_buf;
 	int write_pos;
-	bool sound_open;
+	bool sound_open = false;
 	
 	int16_t* buf( int index );
 	void fill_buffer( Uint8*, int );

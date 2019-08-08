@@ -158,10 +158,8 @@ bool Gb_Apu::end_frame( long end_time )
 	return result;
 }
 
-void Gb_Apu::write_register( long time, unsigned addr, int data )
+void Gb_Apu::write_register( long time, uint16_t addr, uint8_t data )
 {
-	require( (unsigned) data < 0x100 );
-	
 	int reg = addr - start_addr;
 	if ( (unsigned) reg >= register_count )
 		return;
@@ -236,14 +234,14 @@ void Gb_Apu::write_register( long time, unsigned addr, int data )
 	}
 }
 
-int Gb_Apu::read_register( long time, unsigned addr )
+uint8_t Gb_Apu::read_register( long time, uint16_t addr )
 {
 	// function now takes actual address, i.e. 0xFFXX
 	require( start_addr <= addr && addr <= end_addr );
 	
 	run_until( time );
 	
-	int data = regs [addr - start_addr];
+	auto data = regs [addr - start_addr];
 	
 	if ( addr == 0xff26 )
 	{

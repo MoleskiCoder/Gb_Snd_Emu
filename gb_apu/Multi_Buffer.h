@@ -22,7 +22,6 @@ public:
 		Blip_Buffer* left;
 		Blip_Buffer* right;
 	};
-	virtual channel_t channel( int index ) = 0;
 	
 	// See Blip_Buffer.h
 	virtual void set_sample_rate(long rate, int msec = Blip_Buffer::blip_default_length) {

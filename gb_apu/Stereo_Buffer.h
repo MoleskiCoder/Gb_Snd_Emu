@@ -20,7 +20,6 @@ public:
 	void clock_rate(long);
 	void bass_freq(int);
 	void clear();
-	channel_t channel(int index) { return chan; }
 	void end_frame(long, bool added_stereo = true);
 
 	long samples_avail() const { return bufs[0].samples_avail() * 2; }

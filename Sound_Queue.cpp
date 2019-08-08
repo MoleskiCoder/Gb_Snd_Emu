@@ -31,12 +31,6 @@ static const char* sdl_error( const char* str )
 	return str;
 }
 
-Sound_Queue::Sound_Queue()
-{
-	free_sem = NULL;
-	sound_open = false;
-}
-
 Sound_Queue::~Sound_Queue()
 {
 	stop();

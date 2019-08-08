@@ -25,27 +25,24 @@ public:
 
 	long reader_accum;
 	int bass_shift;
-	unsigned long factor_;
-	unsigned long offset_;
+	unsigned long factor_ = ~0ul;
+	unsigned long offset_ = 0;
 	std::vector<uint16_t> buffer_;
-	unsigned buffer_size_;
+	unsigned buffer_size_ = 0;
 
-	// Construct an empty buffer.
-	Blip_Buffer();
-	
 	// Set output sample rate and buffer length in milliseconds (1/1000 sec),
 	// then clear buffer. If length is not specified, make as large as possible.
 	// If there is insufficient memory for the buffer, sets the buffer length
 	// to 0 and returns error string (or propagates exception if compiler supports it).
-	void set_sample_rate( long samples_per_sec, int msec_length = blip_default_length );
+	void set_sample_rate( long samples_per_sec, int msec_length = blip_default_length ) noexcept;
 	
 	// Length of buffer, in milliseconds
-	int length() const {
+	int length() const noexcept {
 		return length_;
 	}
 	
 	// Current output sample rate
-	long sample_rate() const {
+	long sample_rate() const noexcept {
 		return samples_per_sec;
 	}
 	
@@ -55,7 +52,7 @@ public:
 		factor_ = clock_rate_factor(cps);
 	}
 
-	long clock_rate() const {
+	long clock_rate() const noexcept {
 		return clocks_per_sec;
 	}
 	
@@ -64,20 +61,20 @@ public:
 	
 	// Remove all available samples and clear buffer to silence. If 'entire_buffer' is
 	// false, just clear out any samples waiting rather than the entire buffer.
-	void clear( bool entire_buffer = true );
+	void clear( );
 	
 	// End current time frame of specified duration and make its samples available
 	// (along with any still-unread samples) for reading with read_samples(). Begin
 	// a new time frame at the end of the current frame. All transitions must have
 	// been added before 'time'.
-	void end_frame( long t ) {
+	void end_frame( long t ) noexcept {
 		offset_ += t * factor_;
 		assert(("Blip_Buffer::end_frame(): Frame went past end of buffer",
 			samples_avail() <= (long)buffer_size_));
 	}
 	
 	// Number of samples available for reading with read_samples()
-	long samples_avail() const {
+	long samples_avail() const noexcept {
 		return long(offset_ >> BLIP_BUFFER_ACCURACY);
 	}
 	
@@ -85,35 +82,33 @@ public:
 	void remove_samples( long count );
 	
 	// Number of samples delay from synthesis to samples read out
-	int output_latency() const {
+	constexpr int output_latency() const noexcept {
 		return widest_impulse_ / 2;
 	}
 	
 	// not documented yet
 	
-	void remove_silence( long count ) {
-		assert(("Blip_Buffer::remove_silence(): Tried to remove more samples than available",
-			count <= samples_avail()));
+	void remove_silence( long count ) noexcept {
 		offset_ -= unsigned long(count) << BLIP_BUFFER_ACCURACY;
 	}
 	
-	unsigned long resampled_time( long t ) const
+	unsigned long resampled_time( long t ) const noexcept
 	{
 		return t * unsigned long (factor_) + offset_;
 	}
 	
 	unsigned long clock_rate_factor( long clock_rate ) const;
 	
-	unsigned long resampled_duration( int t ) const
+	unsigned long resampled_duration( int t ) const noexcept
 	{
 		return t * unsigned long (factor_);
 	}
 	
 private:
-	long samples_per_sec;
-	long clocks_per_sec;
-	int bass_freq_;
-	int length_;
+	long samples_per_sec = 44100;
+	long clocks_per_sec = 0;
+	int bass_freq_ = 16;
+	int length_ = 0;
 };
 
 // End of public interface

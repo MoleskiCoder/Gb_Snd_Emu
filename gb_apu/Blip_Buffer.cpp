@@ -21,39 +21,20 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA */
 
 #include BLARGG_SOURCE_BEGIN
 
-Blip_Buffer::Blip_Buffer()
+void Blip_Buffer::clear( )
 {
-	samples_per_sec = 44100;
-	
-	// try to cause assertion failure if buffer is used before these are set
-	clocks_per_sec = 0;
-	factor_ = ~0ul;
-	offset_ = 0;
-	buffer_size_ = 0;
-	length_ = 0;
-	
-	bass_freq_ = 16;
-}
-
-void Blip_Buffer::clear( bool entire_buffer )
-{
-	long count = (entire_buffer ? buffer_size_ : samples_avail());
 	offset_ = 0;
 	reader_accum = 0;
 	if ( !buffer_.empty() )
-		std::fill_n(buffer_.begin(), count + widest_impulse_, sample_offset_);
+		std::fill_n(buffer_.begin(), buffer_size_ + widest_impulse_, sample_offset_);
 }
 
-void Blip_Buffer::set_sample_rate( long new_rate, int msec )
+void Blip_Buffer::set_sample_rate( long new_rate, int msec ) noexcept
 {
 	unsigned new_size = (std::numeric_limits<unsigned>::max() >> BLIP_BUFFER_ACCURACY) + 1 - widest_impulse_ - 64;
 	if ( msec != blip_default_length )
 	{
-		size_t s = (new_rate * (msec + 1) + 999) / 1000;
-		if ( s < new_size )
-			new_size = s;
-		else
-			require( false ); // requested buffer length exceeds limit
+		new_size = (new_rate * (msec + 1) + 999) / 1000;
 	}
 	
 	if ( buffer_size_ != new_size )
@@ -67,8 +48,6 @@ void Blip_Buffer::set_sample_rate( long new_rate, int msec )
 	
 	buffer_size_ = new_size;
 	length_ = new_size * 1000 / new_rate - 1;
-	if ( msec )
-		assert( length_ == msec ); // ensure length is same as that passed in
 	
 	samples_per_sec = new_rate;
 	if ( clocks_per_sec )
@@ -81,10 +60,8 @@ void Blip_Buffer::set_sample_rate( long new_rate, int msec )
 
 unsigned long Blip_Buffer::clock_rate_factor( long clock_rate ) const
 {
-	unsigned long factor = (unsigned long) std::floor(
+	return (unsigned long) std::floor(
 			(double) samples_per_sec / clock_rate * (1L << BLIP_BUFFER_ACCURACY) + 0.5 );
-	require( factor > 0 ); // clock_rate/sample_rate ratio is too large
-	return factor;
 }
 
 void Blip_Buffer::bass_freq( int freq )
@@ -115,7 +92,7 @@ void Blip_Buffer::remove_samples( long count )
 	int const copy_extra = 1;
 	
 	// copy remaining samples to beginning and clear old samples
-	long remain = samples_avail() + widest_impulse_ + copy_extra;
+	const long remain = samples_avail() + widest_impulse_ + copy_extra;
 	if ( count >= remain )
 		std::move(buffer_.cbegin() + count, buffer_.cbegin() + count + remain, buffer_.begin());
 	else

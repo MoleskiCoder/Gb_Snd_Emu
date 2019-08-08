@@ -16,7 +16,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA */
 
 // Stereo_Buffer
 
-Stereo_Buffer::Stereo_Buffer() : Multi_Buffer(2)
+Stereo_Buffer::Stereo_Buffer() noexcept : Multi_Buffer(2)
 {
 	chan.center = &bufs[0];
 	chan.left = &bufs[1];
@@ -27,7 +27,7 @@ Stereo_Buffer::~Stereo_Buffer()
 {
 }
 
-void Stereo_Buffer::set_sample_rate(long rate, int msec)
+void Stereo_Buffer::set_sample_rate(long rate, int msec) noexcept
 {
 	for (auto& buf : bufs)
 		buf.set_sample_rate(rate, msec);
@@ -54,7 +54,7 @@ void Stereo_Buffer::clear()
 		buf.clear();
 }
 
-void Stereo_Buffer::end_frame(long clock_count, bool stereo)
+void Stereo_Buffer::end_frame(long clock_count, bool stereo) noexcept
 {
 	for (auto& buf : bufs)
 		buf.end_frame(clock_count);
@@ -64,11 +64,9 @@ void Stereo_Buffer::end_frame(long clock_count, bool stereo)
 
 long Stereo_Buffer::read_samples(std::vector<int16_t>& out)
 {
-	long count = out.size();
-	require(!(count & 1)); // count must be even
-	count = (unsigned)count / 2;
+	long count = out.size() / 2;
 
-	long avail = bufs[0].samples_avail();
+	const long avail = bufs[0].samples_avail();
 	if (count > avail)
 		count = avail;
 	if (count)
@@ -108,14 +106,14 @@ void Stereo_Buffer::mix_stereo(std::vector<int16_t>& out)
 
 	left.begin(bufs[1]);
 	right.begin(bufs[2]);
-	int bass = center.begin(bufs[0]);
+	const int bass = center.begin(bufs[0]);
 
 	long offset = 0;
 	long count = out.size() / 2;
 
 	while (count--)
 	{
-		int c = center.read();
+		const int c = center.read();
 		long l = c + left.read();
 		long r = c + right.read();
 		center.next(bass);
@@ -140,7 +138,7 @@ void Stereo_Buffer::mix_stereo(std::vector<int16_t>& out)
 void Stereo_Buffer::mix_mono(std::vector<int16_t>& out)
 {
 	Blip_Reader in;
-	int bass = in.begin(bufs[0]);
+	const int bass = in.begin(bufs[0]);
 
 	long offset = 0;
 	long count = out.size() / 2;

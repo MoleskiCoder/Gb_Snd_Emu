@@ -2,7 +2,7 @@
 // Blip_Buffer 0.3.4. http://www.slack.net/~ant/libs/
 
 #include "Multi_Buffer.h"
-#include "Blip_Reader.h"
+//#include "Blip_Reader.h"
 
 /* Copyright (C) 2003-2005 Shay Green. This module is free software; you
 can redistribute it and/or modify it under the terms of the GNU Lesser
@@ -17,8 +17,5 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA */
 
 #include BLARGG_SOURCE_BEGIN
 
-Multi_Buffer::Multi_Buffer( int spf ) : samples_per_frame_( spf ) {
-	length_ = 0;
-	sample_rate_ = 0;
-	channels_changed_count_ = 1;
+Multi_Buffer::Multi_Buffer( int spf ) noexcept : samples_per_frame_( spf ) {
 }

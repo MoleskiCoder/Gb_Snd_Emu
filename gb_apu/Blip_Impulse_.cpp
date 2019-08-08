@@ -21,7 +21,7 @@ void Blip_Impulse_::init(uint32_t* imps, int w, int r, int fb)
 
 void Blip_Impulse_::scale_impulse(int unit, uint16_t* imp_in) const
 {
-	long offset = ((long)unit << impulse_bits) - impulse_offset * unit +
+	const long offset = ((long)unit << impulse_bits) - impulse_offset * unit +
 		(1 << (impulse_bits - 1));
 	uint16_t* imp = imp_in;
 	uint16_t* fimp = impulse;
@@ -141,7 +141,7 @@ void Blip_Impulse_::treble_eq(const blip_eq_t& new_eq)
 	const int size = Blip_Buffer::max_res * (width - 2) / 2;
 	for (int i = size; i--; )
 	{
-		double angle = (i * 2 + 1) * to_angle;
+		const double angle = (i * 2 + 1) * to_angle;
 
 		// equivalent
 		//double y =     dsf( angle, n_harm * cutoff, 1.0 );
@@ -152,11 +152,11 @@ void Blip_Impulse_::treble_eq(const blip_eq_t& new_eq)
 		const double cos_nc_angle = cos(n_harm * cutoff * angle);
 		const double cos_nc1_angle = cos((n_harm * cutoff - 1.0) * angle);
 
-		double b = 2.0 - 2.0 * cos_angle;
-		double a = 1.0 - cos_angle - cos_nc_angle + cos_nc1_angle;
+		const double b = 2.0 - 2.0 * cos_angle;
+		const double a = 1.0 - cos_angle - cos_nc_angle + cos_nc1_angle;
 
-		double d = 1.0 + rolloff * (rolloff - 2.0 * cos_angle);
-		double c = pow_a_n * rolloff * cos((n_harm - 1.0) * angle) -
+		const double d = 1.0 + rolloff * (rolloff - 2.0 * cos_angle);
+		const double c = pow_a_n * rolloff * cos((n_harm - 1.0) * angle) -
 			pow_a_n * cos(n_harm * angle) -
 			pow_a_nc * rolloff * cos_nc1_angle +
 			pow_a_nc * cos_nc_angle;
@@ -167,7 +167,7 @@ void Blip_Impulse_::treble_eq(const blip_eq_t& new_eq)
 		// fixed window which affects wider impulses more
 		if (width > 12)
 		{
-			double window = cos(n_harm / 1.25 / Blip_Buffer::widest_impulse_ * angle);
+			const double window = cos(n_harm / 1.25 / Blip_Buffer::widest_impulse_ * angle);
 			y *= window * window;
 		}
 
@@ -176,7 +176,7 @@ void Blip_Impulse_::treble_eq(const blip_eq_t& new_eq)
 	}
 
 	// integrate runs of length 'max_res'
-	double factor = impulse_amp * 0.5 / total; // 0.5 accounts for other mirrored half
+	const double factor = impulse_amp * 0.5 / total; // 0.5 accounts for other mirrored half
 	uint16_t* imp = impulse;
 	const int step = Blip_Buffer::max_res / res;
 	int offset = res > 1 ? Blip_Buffer::max_res : Blip_Buffer::max_res / 2;
@@ -198,7 +198,7 @@ void Blip_Impulse_::treble_eq(const blip_eq_t& new_eq)
 	}
 
 	// rescale
-	double unit = volume_unit_;
+	const double unit = volume_unit_;
 	if (unit >= 0)
 	{
 		volume_unit_ = -1;

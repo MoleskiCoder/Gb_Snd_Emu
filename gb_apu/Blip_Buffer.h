@@ -17,8 +17,18 @@ public:
 	enum { blip_default_length = 0 };
 	enum { BLIP_BUFFER_ACCURACY = 16 };
 	enum { blip_res_bits_ = 5 };
+	enum { accum_fract = 15 }; // less than 16 to give extra sample range
+	enum { sample_offset_ = 0x7F7F }; // repeated byte allows memset to clear buffer
+	enum { widest_impulse_ = 24 };
 
 	static constexpr int max_res = 1 << Blip_Buffer::blip_res_bits_;
+
+	long reader_accum;
+	int bass_shift;
+	unsigned long factor_;
+	unsigned long offset_;
+	std::vector<uint16_t> buffer_;
+	unsigned buffer_size_;
 
 	// Construct an empty buffer.
 	Blip_Buffer();
@@ -27,7 +37,7 @@ public:
 	// then clear buffer. If length is not specified, make as large as possible.
 	// If there is insufficient memory for the buffer, sets the buffer length
 	// to 0 and returns error string (or propagates exception if compiler supports it).
-	blargg_err_t set_sample_rate( long samples_per_sec, int msec_length = blip_default_length );
+	void set_sample_rate( long samples_per_sec, int msec_length = blip_default_length );
 	
 	// Length of buffer, in milliseconds
 	int length() const {
@@ -100,30 +110,10 @@ public:
 	}
 	
 private:
-	// noncopyable
-	Blip_Buffer( const Blip_Buffer& );
-	Blip_Buffer& operator = ( const Blip_Buffer& );
-
-	// Don't use the following members. They are public only for technical reasons.
-	public:
-		enum { sample_offset_ = 0x7F7F }; // repeated byte allows memset to clear buffer
-		enum { widest_impulse_ = 24 };
-		
-		unsigned long factor_;
-		unsigned long offset_;
-		std::vector<uint16_t> buffer_;
-		unsigned buffer_size_;
-	private:
-		long reader_accum;
-		int bass_shift;
-		long samples_per_sec;
-		long clocks_per_sec;
-		int bass_freq_;
-		int length_;
-		
-		enum { accum_fract = 15 }; // less than 16 to give extra sample range
-		
-		friend class Blip_Reader;
+	long samples_per_sec;
+	long clocks_per_sec;
+	int bass_freq_;
+	int length_;
 };
 
 // End of public interface

@@ -44,7 +44,7 @@ void Blip_Buffer::clear( bool entire_buffer )
 		std::fill_n(buffer_.begin(), count + widest_impulse_, sample_offset_);
 }
 
-blargg_err_t Blip_Buffer::set_sample_rate( long new_rate, int msec )
+void Blip_Buffer::set_sample_rate( long new_rate, int msec )
 {
 	unsigned new_size = (std::numeric_limits<unsigned>::max() >> BLIP_BUFFER_ACCURACY) + 1 - widest_impulse_ - 64;
 	if ( msec != blip_default_length )
@@ -77,8 +77,6 @@ blargg_err_t Blip_Buffer::set_sample_rate( long new_rate, int msec )
 	bass_freq( bass_freq_ ); // recalculate shift
 	
 	clear();
-	
-	return blargg_success;
 }
 
 unsigned long Blip_Buffer::clock_rate_factor( long clock_rate ) const

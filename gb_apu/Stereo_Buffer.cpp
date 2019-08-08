@@ -27,11 +27,11 @@ Stereo_Buffer::~Stereo_Buffer()
 {
 }
 
-blargg_err_t Stereo_Buffer::set_sample_rate(long rate, int msec)
+void Stereo_Buffer::set_sample_rate(long rate, int msec)
 {
 	for (int i = 0; i < buf_count; i++)
-		BLARGG_RETURN_ERR(bufs[i].set_sample_rate(rate, msec));
-	return Multi_Buffer::set_sample_rate(bufs[0].sample_rate(), bufs[0].length());
+		bufs[i].set_sample_rate(rate, msec);
+	Multi_Buffer::set_sample_rate(bufs[0].sample_rate(), bufs[0].length());
 }
 
 void Stereo_Buffer::clock_rate(long rate)

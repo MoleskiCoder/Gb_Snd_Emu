@@ -28,10 +28,9 @@ public:
 	virtual channel_t channel( int index ) = 0;
 	
 	// See Blip_Buffer.h
-	virtual blargg_err_t set_sample_rate(long rate, int msec = Blip_Buffer::blip_default_length) {
+	virtual void set_sample_rate(long rate, int msec = Blip_Buffer::blip_default_length) {
 		sample_rate_ = rate;
 		length_ = msec;
-		return blargg_success;
 	}
 
 	virtual void clock_rate( long ) = 0;

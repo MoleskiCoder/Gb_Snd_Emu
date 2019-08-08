@@ -4,8 +4,6 @@
 
 #include <cstdint>
 
-class Blip_Buffer;
-
 class Blip_Impulse_ {
 
 	static constexpr int impulse_bits = 15;
@@ -26,7 +24,6 @@ class Blip_Impulse_ {
 	void fine_volume_unit();
 	void scale_impulse(int unit, uint16_t*) const;
 public:
-	Blip_Buffer*    buf;
 	uint32_t offset;
 
 	void init(uint32_t* impulses, int width, int res, int fine_bits = 0);

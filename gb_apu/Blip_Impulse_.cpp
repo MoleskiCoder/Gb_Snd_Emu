@@ -14,7 +14,6 @@ void Blip_Impulse_::init(uint32_t* imps, int w, int r, int fb)
 	generate = true;
 	volume_unit_ = -1.0;
 	res = r;
-	buf = NULL;
 
 	impulse = &impulses[width * res * 2 * (fine_bits ? 2 : 1)];
 	offset = 0;

@@ -16,7 +16,7 @@ public:
 	Blip_Buffer* right() { return &bufs[2]; }
 
 	// See Multi_Buffer
-	blargg_err_t set_sample_rate(long, int msec = Blip_Buffer::blip_default_length);
+	void set_sample_rate(long, int msec = Blip_Buffer::blip_default_length);
 	void clock_rate(long);
 	void bass_freq(int);
 	void clear();

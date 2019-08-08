@@ -23,14 +23,12 @@ public:
 	
 	// Assign all oscillator outputs to specified buffer(s). If buffer
 	// is NULL, silence all oscillators.
-	void output( Blip_Buffer* mono );
 	void output( Blip_Buffer* center, Blip_Buffer* left, Blip_Buffer* right );
 	
 	// Assign single oscillator output to buffer(s). Valid indicies are 0 to 3,
 	// which refer to Square 1, Square 2, Wave, and Noise.
 	// If buffer is NULL, silence oscillator.
 	enum { osc_count = 4 };
-	void osc_output( int index, Blip_Buffer* mono );
 	void osc_output( int index, Blip_Buffer* center, Blip_Buffer* left, Blip_Buffer* right );
 	
 	// Reads and writes at addr must satisfy start_addr <= addr <= end_addr
@@ -71,7 +69,3 @@ private:
 	
 	void run_until( long );
 };
-
-inline void Gb_Apu::output( Blip_Buffer* b ) { output( b, NULL, NULL ); }
-	
-inline void Gb_Apu::osc_output( int i, Blip_Buffer* b ) { osc_output( i, b, NULL, NULL ); }

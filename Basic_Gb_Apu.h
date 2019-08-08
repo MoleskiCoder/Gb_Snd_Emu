@@ -16,7 +16,7 @@ public:
 	~Basic_Gb_Apu();
 	
 	// Set output sample rate
-	blargg_err_t set_sample_rate( long rate );
+	void set_sample_rate( long rate );
 	
 	// Pass reads and writes in the range 0xff10-0xff3f
 	void write_register( unsigned, int data );

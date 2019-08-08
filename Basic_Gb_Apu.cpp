@@ -29,11 +29,11 @@ Basic_Gb_Apu::~Basic_Gb_Apu()
 {
 }
 
-blargg_err_t Basic_Gb_Apu::set_sample_rate( long rate )
+void Basic_Gb_Apu::set_sample_rate( long rate )
 {
 	apu.output( buf.center(), buf.left(), buf.right() );
 	buf.clock_rate( 4194304 );
-	return buf.set_sample_rate( rate );
+	buf.set_sample_rate( rate );
 }
 
 void Basic_Gb_Apu::write_register( unsigned addr, int data )

@@ -29,35 +29,35 @@ Stereo_Buffer::~Stereo_Buffer()
 
 void Stereo_Buffer::set_sample_rate(long rate, int msec)
 {
-	for (int i = 0; i < buf_count; i++)
-		bufs[i].set_sample_rate(rate, msec);
+	for (auto& buf : bufs)
+		buf.set_sample_rate(rate, msec);
 	Multi_Buffer::set_sample_rate(bufs[0].sample_rate(), bufs[0].length());
 }
 
 void Stereo_Buffer::clock_rate(long rate)
 {
-	for (int i = 0; i < buf_count; i++)
-		bufs[i].clock_rate(rate);
+	for (auto& buf : bufs)
+		buf.clock_rate(rate);
 }
 
 void Stereo_Buffer::bass_freq(int bass)
 {
-	for (unsigned i = 0; i < buf_count; i++)
-		bufs[i].bass_freq(bass);
+	for (auto& buf : bufs)
+		buf.bass_freq(bass);
 }
 
 void Stereo_Buffer::clear()
 {
 	stereo_added = false;
 	was_stereo = false;
-	for (int i = 0; i < buf_count; i++)
-		bufs[i].clear();
+	for (auto& buf : bufs)
+		buf.clear();
 }
 
 void Stereo_Buffer::end_frame(long clock_count, bool stereo)
 {
-	for (unsigned i = 0; i < buf_count; i++)
-		bufs[i].end_frame(clock_count);
+	for (auto& buf : bufs)
+		buf.end_frame(clock_count);
 
 	stereo_added |= stereo;
 }
@@ -86,7 +86,6 @@ long Stereo_Buffer::read_samples(std::vector<int16_t>& out)
 			mix_mono(out);
 
 			bufs[0].remove_samples(count);
-
 			bufs[1].remove_silence(count);
 			bufs[2].remove_silence(count);
 		}
@@ -134,8 +133,8 @@ void Stereo_Buffer::mix_stereo(std::vector<int16_t>& out)
 	}
 
 	center.end(bufs[0]);
-	right.end(bufs[2]);
 	left.end(bufs[1]);
+	right.end(bufs[2]);
 }
 
 void Stereo_Buffer::mix_mono(std::vector<int16_t>& out)

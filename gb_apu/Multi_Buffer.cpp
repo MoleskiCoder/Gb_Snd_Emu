@@ -22,7 +22,3 @@ Multi_Buffer::Multi_Buffer( int spf ) : samples_per_frame_( spf ) {
 	sample_rate_ = 0;
 	channels_changed_count_ = 1;
 }
-
-blargg_err_t Multi_Buffer::set_channel_count( int ) {
-	return blargg_success;
-}

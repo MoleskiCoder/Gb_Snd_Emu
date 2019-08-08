@@ -16,9 +16,6 @@ public:
 	Multi_Buffer( int samples_per_frame );
 	virtual ~Multi_Buffer() { }
 	
-	// Set the number of channels available
-	virtual blargg_err_t set_channel_count( int );
-	
 	// Get indexed channel, from 0 to channel count - 1
 	struct channel_t {
 		Blip_Buffer* center;

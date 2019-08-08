@@ -20,7 +20,3 @@
 #include <cstddef>
 #include <cassert>
 #include <limits>
-
-// blargg_err_t (NULL on success, otherwise error string)
-typedef const char* blargg_err_t;
-const blargg_err_t blargg_success = nullptr;

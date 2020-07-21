@@ -89,19 +89,19 @@ public:
 	// not documented yet
 	
 	void remove_silence( long count ) noexcept {
-		offset_ -= unsigned long(count) << BLIP_BUFFER_ACCURACY;
+		offset_ -= (unsigned long)(count) << BLIP_BUFFER_ACCURACY;
 	}
 	
 	unsigned long resampled_time( long t ) const noexcept
 	{
-		return t * unsigned long (factor_) + offset_;
+		return t * (unsigned long)(factor_) + offset_;
 	}
 	
 	unsigned long clock_rate_factor( long clock_rate ) const;
 	
 	unsigned long resampled_duration( int t ) const noexcept
 	{
-		return t * unsigned long (factor_);
+		return t * (unsigned long)(factor_);
 	}
 	
 private:

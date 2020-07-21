@@ -52,8 +52,6 @@ public:
 	void volume_unit( double unit )         { impulse.volume_unit( unit ); }
 	
 	// Default Blip_Buffer used for output when none is specified for a given call
-	Blip_Buffer* output() const             { return impulse.buf; }
-	void output( Blip_Buffer* b )           { impulse.buf = b; }
 	
 	// Add an amplitude offset (transition) with a magnitude of delta * volume_unit
 	// into the specified buffer (default buffer if none specified) at the
@@ -62,17 +60,8 @@ public:
 	void offset( long, int delta, Blip_Buffer* ) const;
 	
 	void offset_resampled( unsigned long, int delta, Blip_Buffer* ) const;
-	void offset_resampled( unsigned long t, int o ) const {
-		offset_resampled( t, o, impulse.buf );
-	}
-	void offset( long t, int delta ) const {
-		offset( t, delta, impulse.buf );
-	}
 	void offset_inline( long time, int delta, Blip_Buffer* buf ) const {
 		offset_resampled( time * buf->factor_ + buf->offset_, delta, buf );
-	}
-	void offset_inline( long time, int delta ) const {
-		offset_inline( time, delta, impulse.buf );
 	}
 };
 

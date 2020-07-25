@@ -11,7 +11,7 @@ OBJECTS = $(CXXOBJECTS)
 
 all: opt
 
-opt: CXXFLAGS += -DNDEBUG -march=native -O3 -flto
+opt: CXXFLAGS += -DNDEBUG -march=native -Ofast -flto
 opt: $(LIB)
 
 debug: CXXFLAGS += -D_DEBUG

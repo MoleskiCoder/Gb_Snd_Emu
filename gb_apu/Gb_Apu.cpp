@@ -161,8 +161,7 @@ bool Gb_Apu::end_frame( long end_time )
 void Gb_Apu::write_register( long time, uint16_t addr, uint8_t data )
 {
 	int reg = addr - start_addr;
-	if ( (unsigned) reg >= register_count )
-		return;
+	assert((unsigned)reg < register_count);
 	
 	run_until( time );
 	
